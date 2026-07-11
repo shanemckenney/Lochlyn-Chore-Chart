@@ -185,6 +185,12 @@
   .edit-row{ display:flex; align-items:center; gap:8px; padding:8px 0; }
   .edit-row input{ flex:1; }
   .edit-row input.emoji-in{ max-width:52px; text-align:center; flex:0 0 auto; }
+  select.emoji-select{
+    max-width:150px; flex:0 0 auto; padding:10px 8px; border-radius:12px; border:2px solid #E2E7EF;
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:14px; background:#fff;
+  }
+  .edit-row select.emoji-select{ max-width:130px; }
+  input.emoji-custom{ max-width:60px !important; text-align:center; }
   .edit-row input.amount-in{ max-width:70px; text-align:center; flex:0 0 auto; }
   .edit-row .del{ background:var(--flame-hot); color:#fff; border:none; border-radius:10px; width:32px; height:32px; cursor:pointer; flex:0 0 auto; }
   .add-row{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
@@ -298,7 +304,8 @@
       <h3>☀️ Edit morning tasks</h3>
       <div id="editMorning"></div>
       <div class="add-row">
-        <input type="text" class="emoji-in" id="addMorningEmoji" placeholder="🪥">
+        <select class="emoji-in emoji-select" id="addMorningEmoji"></select>
+        <input type="text" class="emoji-in emoji-custom" id="addMorningEmojiCustom" placeholder="🪄" style="display:none;">
         <input type="text" id="addMorningLabel" placeholder="New task name">
         <button class="small-add" id="addMorningBtn">+ Add</button>
       </div>
@@ -308,7 +315,8 @@
       <h3>🌙 Edit evening tasks</h3>
       <div id="editEvening"></div>
       <div class="add-row">
-        <input type="text" class="emoji-in" id="addEveningEmoji" placeholder="🛁">
+        <select class="emoji-in emoji-select" id="addEveningEmoji"></select>
+        <input type="text" class="emoji-in emoji-custom" id="addEveningEmojiCustom" placeholder="🪄" style="display:none;">
         <input type="text" id="addEveningLabel" placeholder="New task name">
         <button class="small-add" id="addEveningBtn">+ Add</button>
       </div>
@@ -318,7 +326,8 @@
       <h3>💵 Edit paid chores</h3>
       <div id="editChores"></div>
       <div class="add-row">
-        <input type="text" class="emoji-in" id="addChoreEmoji" placeholder="🧹">
+        <select class="emoji-in emoji-select" id="addChoreEmoji"></select>
+        <input type="text" class="emoji-in emoji-custom" id="addChoreEmojiCustom" placeholder="🪄" style="display:none;">
         <input type="text" id="addChoreLabel" placeholder="Chore name">
         <input type="number" class="amount-in" id="addChoreAmount" placeholder="$" min="0" step="0.5">
         <button class="small-add" id="addChoreBtn">+ Add</button>
@@ -356,16 +365,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCjccEZyWBVjR_hTzQ2oSFEQWawcIyBfjs",
-  authDomain: "lochlyn-chore-chart.firebaseapp.com",
-  databaseURL: "https://lochlyn-chore-chart-default-rtdb.firebaseio.com",
-  projectId: "lochlyn-chore-chart",
-  storageBucket: "lochlyn-chore-chart.firebasestorage.app",
-  messagingSenderId: "458552344407",
-  appId: "1:458552344407:web:195db36abc1cffac698812"
+  apiKey: "PASTE_YOUR_API_KEY",
+  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://PASTE_YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "PASTE_YOUR_PROJECT",
+  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
 };
 
-const PARENT_PIN = "0529"; // change this to whatever PIN you want
+const PARENT_PIN = "1234"; // change this to whatever PIN you want
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -405,6 +414,33 @@ const DEFAULT_CHORES = [
   { id:"c2", emoji:"🐶", label:"Feed the dog", amount:0.5 },
   { id:"c3", emoji:"🗑️", label:"Take out trash", amount:1 }
 ];
+
+/* ---------- Curated icon choices for the emoji picker ---------- */
+const EMOJI_CHOICES = [
+  ["🪥","Toothbrush"], ["🦷","Teeth"], ["🛁","Bath"], ["🚿","Shower"],
+  ["🛏️","Bed"], ["👕","Shirt"], ["👖","Pants/PJs"], ["🧦","Socks"],
+  ["👟","Shoes"], ["🎒","Backpack"], ["🥣","Cereal"], ["🍽️","Meal/Dishes"],
+  ["🥪","Lunch"], ["📖","Reading"], ["📚","Homework"], ["✏️","Schoolwork"],
+  ["🧸","Toys"], ["🧹","Sweeping"], ["🧺","Laundry"], ["🗑️","Trash"],
+  ["🧽","Cleaning"], ["🧴","Soap/Lotion"], ["🖍️","Coloring/Art"], ["💊","Medicine"],
+  ["🐶","Dog"], ["🐱","Cat"], ["🪴","Plant"], ["🌱","Watering"],
+  ["🚗","Car"], ["🚲","Bike"], ["⚽","Soccer"], ["🏆","Trophy"],
+  ["🛡️","Badge"], ["⭐","Star"], ["🌟","Sparkle"], ["☀️","Sun/Morning"],
+  ["🌙","Moon/Night"], ["⏰","Alarm Clock"], ["💰","Money"], ["📦","Organize"],
+  ["🎮","Game Time"], ["🪟","Window"], ["🧻","Tidy Up"], ["🎒","Get Ready"]
+];
+function emojiOptionsHTML(selectedEmoji){
+  return EMOJI_CHOICES.map(([e,l])=>
+    '<option value="' + e + '"' + (e === selectedEmoji ? ' selected' : '') + '>' + e + ' ' + l + '</option>'
+  ).join("") + '<option value="__custom__">✏️ Type my own…</option>';
+}
+function populateEmojiSelect(selectEl, currentEmoji){
+  const inList = EMOJI_CHOICES.some(([e]) => e === currentEmoji);
+  selectEl.innerHTML = emojiOptionsHTML(inList ? currentEmoji : null);
+  if(!inList && currentEmoji){
+    selectEl.value = "__custom__";
+  }
+}
 
 let tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
 let chores = JSON.parse(JSON.stringify(DEFAULT_CHORES));
@@ -756,13 +792,34 @@ function renderEditList(period, containerId){
   (tasks[period] || []).forEach(t=>{
     const row = document.createElement("div");
     row.className = "edit-row";
+    const selId = "sel_" + period + "_" + t.id;
+    const cusId = "cus_" + period + "_" + t.id;
     row.innerHTML =
-      '<input type="text" class="emoji-in" value="' + escapeAttr(t.emoji) + '" data-field="emoji">' +
+      '<select class="emoji-in emoji-select" id="' + selId + '"></select>' +
+      '<input type="text" class="emoji-in emoji-custom" id="' + cusId + '" placeholder="🪄" style="display:none;">' +
       '<input type="text" value="' + escapeAttr(t.label) + '" data-field="label">' +
       '<button class="del">✕</button>';
-    const emojiInput = row.querySelector('[data-field="emoji"]');
+    const selectEl = row.querySelector("#" + selId);
+    const customEl = row.querySelector("#" + cusId);
+    populateEmojiSelect(selectEl, t.emoji);
+    if(selectEl.value === "__custom__"){
+      customEl.style.display = "inline-block";
+      customEl.value = t.emoji;
+    }
+    selectEl.addEventListener("change", ()=>{
+      if(selectEl.value === "__custom__"){
+        customEl.style.display = "inline-block";
+        customEl.focus();
+      } else {
+        customEl.style.display = "none";
+        updateTaskField(period, t.id, "emoji", selectEl.value);
+      }
+    });
+    customEl.addEventListener("change", ()=>{
+      const val = customEl.value.trim();
+      if(val) updateTaskField(period, t.id, "emoji", val);
+    });
     const labelInput = row.querySelector('[data-field="label"]');
-    emojiInput.addEventListener("change", ()=> updateTaskField(period, t.id, "emoji", emojiInput.value));
     labelInput.addEventListener("change", ()=> updateTaskField(period, t.id, "label", labelInput.value));
     row.querySelector(".del").addEventListener("click", ()=>{
       if(window.confirm('Remove "' + t.label + '"?')) deleteTask(period, t.id);
@@ -781,21 +838,49 @@ function deleteTask(period, taskId){
   const list = (tasks[period] || []).filter(t => t.id !== taskId);
   set(ref(db, "routineTracker/config/tasks/" + period), list);
 }
-function addTask(period, emojiInputId, labelInputId){
-  const emojiEl = document.getElementById(emojiInputId);
+function setupEmojiPicker(selectId, customId){
+  const selectEl = document.getElementById(selectId);
+  const customEl = document.getElementById(customId);
+  populateEmojiSelect(selectEl, null);
+  selectEl.addEventListener("change", ()=>{
+    const isCustom = selectEl.value === "__custom__";
+    customEl.style.display = isCustom ? "inline-block" : "none";
+    if(isCustom) customEl.focus();
+  });
+}
+function readEmojiPicker(selectId, customId){
+  const selectEl = document.getElementById(selectId);
+  const customEl = document.getElementById(customId);
+  if(selectEl.value === "__custom__"){
+    return customEl.value.trim() || "⭐";
+  }
+  return selectEl.value || "⭐";
+}
+function resetEmojiPicker(selectId, customId){
+  const selectEl = document.getElementById(selectId);
+  const customEl = document.getElementById(customId);
+  selectEl.value = EMOJI_CHOICES[0][0];
+  customEl.value = "";
+  customEl.style.display = "none";
+}
+setupEmojiPicker("addMorningEmoji", "addMorningEmojiCustom");
+setupEmojiPicker("addEveningEmoji", "addEveningEmojiCustom");
+setupEmojiPicker("addChoreEmoji", "addChoreEmojiCustom");
+
+function addTask(period, emojiSelectId, labelInputId, emojiCustomId){
   const labelEl = document.getElementById(labelInputId);
-  const emoji = emojiEl.value.trim() || "⭐";
+  const emoji = readEmojiPicker(emojiSelectId, emojiCustomId);
   const label = labelEl.value.trim();
   if(!label) return;
   const newId = period[0] + Date.now();
   const list = (tasks[period] || []).concat([{ id:newId, emoji, label }]);
   set(ref(db, "routineTracker/config/tasks/" + period), list).then(()=>{
-    emojiEl.value = "";
     labelEl.value = "";
+    resetEmojiPicker(emojiSelectId, emojiCustomId);
   });
 }
-document.getElementById("addMorningBtn").addEventListener("click", ()=> addTask("morning","addMorningEmoji","addMorningLabel"));
-document.getElementById("addEveningBtn").addEventListener("click", ()=> addTask("evening","addEveningEmoji","addEveningLabel"));
+document.getElementById("addMorningBtn").addEventListener("click", ()=> addTask("morning","addMorningEmoji","addMorningLabel","addMorningEmojiCustom"));
+document.getElementById("addEveningBtn").addEventListener("click", ()=> addTask("evening","addEveningEmoji","addEveningLabel","addEveningEmojiCustom"));
 
 /* ---------- Edit paid chores ---------- */
 function renderEditChores(){
@@ -804,15 +889,36 @@ function renderEditChores(){
   chores.forEach(c=>{
     const row = document.createElement("div");
     row.className = "edit-row";
+    const selId = "sel_chore_" + c.id;
+    const cusId = "cus_chore_" + c.id;
     row.innerHTML =
-      '<input type="text" class="emoji-in" value="' + escapeAttr(c.emoji) + '" data-field="emoji">' +
+      '<select class="emoji-in emoji-select" id="' + selId + '"></select>' +
+      '<input type="text" class="emoji-in emoji-custom" id="' + cusId + '" placeholder="🪄" style="display:none;">' +
       '<input type="text" value="' + escapeAttr(c.label) + '" data-field="label">' +
       '<input type="number" class="amount-in" value="' + Number(c.amount || 0) + '" min="0" step="0.5" data-field="amount">' +
       '<button class="del">✕</button>';
-    const emojiInput = row.querySelector('[data-field="emoji"]');
+    const selectEl = row.querySelector("#" + selId);
+    const customEl = row.querySelector("#" + cusId);
+    populateEmojiSelect(selectEl, c.emoji);
+    if(selectEl.value === "__custom__"){
+      customEl.style.display = "inline-block";
+      customEl.value = c.emoji;
+    }
+    selectEl.addEventListener("change", ()=>{
+      if(selectEl.value === "__custom__"){
+        customEl.style.display = "inline-block";
+        customEl.focus();
+      } else {
+        customEl.style.display = "none";
+        updateChoreField(c.id, "emoji", selectEl.value);
+      }
+    });
+    customEl.addEventListener("change", ()=>{
+      const val = customEl.value.trim();
+      if(val) updateChoreField(c.id, "emoji", val);
+    });
     const labelInput = row.querySelector('[data-field="label"]');
     const amountInput = row.querySelector('[data-field="amount"]');
-    emojiInput.addEventListener("change", ()=> updateChoreField(c.id, "emoji", emojiInput.value));
     labelInput.addEventListener("change", ()=> updateChoreField(c.id, "label", labelInput.value));
     amountInput.addEventListener("change", ()=> updateChoreField(c.id, "amount", parseFloat(amountInput.value) || 0));
     row.querySelector(".del").addEventListener("click", ()=>{
@@ -830,19 +936,18 @@ function deleteChore(choreId){
   set(choresRef, list);
 }
 document.getElementById("addChoreBtn").addEventListener("click", ()=>{
-  const emojiEl = document.getElementById("addChoreEmoji");
   const labelEl = document.getElementById("addChoreLabel");
   const amountEl = document.getElementById("addChoreAmount");
-  const emoji = emojiEl.value.trim() || "⭐";
+  const emoji = readEmojiPicker("addChoreEmoji", "addChoreEmojiCustom");
   const label = labelEl.value.trim();
   const amount = parseFloat(amountEl.value) || 0;
   if(!label) return;
   const newId = "c" + Date.now();
   const list = chores.concat([{ id:newId, emoji, label, amount }]);
   set(choresRef, list).then(()=>{
-    emojiEl.value = "";
     labelEl.value = "";
     amountEl.value = "";
+    resetEmojiPicker("addChoreEmoji", "addChoreEmojiCustom");
   });
 });
 
