@@ -59,4 +59,4 @@ The PIN gate on the parent dashboard is a kid-deterrent, not real security. It l
 
 ## Why this exists
 
-Built during the same stretch of hyperfocus that produced the classroom tools, just pointed at a smaller and considerably more important student. If it gets him brushing his teeth without a fight and gives him a reason to feel proud of a streak, it's done its job.
+Built during the same stretch of hyperfocus that produced many classroom tools, just pointed at a smaller and considerably more important student. If it gets him brushing his teeth without a fight and gives him a reason to feel proud of a streak, it's done its job.
