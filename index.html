@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My Routine">
 <meta name="theme-color" content="#2E2A5C">
-<title>Lochlyn Chore Chart</title>
+<title>Routine Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -182,6 +182,20 @@
   .history-dot{ width:12px; height:12px; border-radius:50%; background:#E2E7EF; }
   .history-dot.on{ background:var(--leaf); }
 
+  .activity-row{
+    display:flex; align-items:center; gap:10px; padding:9px 2px;
+    border-bottom:1px solid rgba(0,0,0,0.06); font-size:14px;
+  }
+  .activity-row:last-child{ border-bottom:none; }
+  .activity-emoji{ font-size:20px; }
+  .activity-label{ flex:1; font-weight:700; }
+  .activity-tag{ font-size:11px; font-weight:800; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px; }
+  .activity-undo{
+    background:#F0EDE6; color:var(--flame-hot); border:none; border-radius:10px;
+    padding:6px 10px; font-family:'Fredoka', sans-serif; font-weight:600; font-size:12px; cursor:pointer;
+  }
+  .activity-empty{ color:var(--muted); font-weight:700; font-size:13px; padding:8px 2px; }
+
   .edit-row{ display:flex; align-items:center; gap:8px; padding:8px 0; }
   .edit-row input{ flex:1; }
   .edit-row input.emoji-in{ max-width:52px; text-align:center; flex:0 0 auto; }
@@ -212,7 +226,7 @@
     <div class="brand">
       <div class="brand-icon">🔥</div>
       <div>
-        <h1>Lochlyn Chore Chart</h1>
+        <h1>My Routine</h1>
         <p><span class="conn-dot" id="connDot"></span><span class="conn-label" id="connLabel">connecting…</span></p>
       </div>
     </div>
@@ -285,6 +299,14 @@
     </div>
     <div class="btn-row">
       <button class="danger" id="resetMoneyBtn">Mark as Paid (reset to $0)</button>
+    </div>
+
+    <div class="panel-section">
+      <h3>Today's Activity</h3>
+      <div id="todaysActivity"></div>
+      <div class="btn-row">
+        <button class="danger" id="clearTodayBtn">Clear Everything for Today</button>
+      </div>
     </div>
 
     <div class="panel-section">
@@ -488,6 +510,7 @@ function bindTodayListener(){
     dayLog = { morning: val.morning || {}, evening: val.evening || {}, paidChores: val.paidChores || {} };
     renderTasks();
     renderChores();
+    renderTodaysActivity();
     checkCelebration();
   });
 }
@@ -580,6 +603,121 @@ function renderStreak(){
 function renderMoney(){
   document.getElementById("moneyChipText").textContent = formatMoney(money.balance) + " saved up";
   document.getElementById("statOwe").textContent = formatMoney(money.balance);
+}
+
+/* ---------- Correcting false or accidental completions ---------- */
+function maybeClawbackToday(){
+  const today = todayStr();
+  const yesterday = dateStrOffset(-1);
+  get(streakRef).then(snap=>{
+    let s = snap.val() || { current:0, longest:0, lastCompleteDate:null };
+    if(s.lastCompleteDate === today && !todayFullyDone()){
+      const oldCurrent = s.current;
+      const newCurrent = Math.max(0, oldCurrent - 1);
+      const newLast = newCurrent > 0 ? yesterday : null;
+      const newLongest = (s.longest === oldCurrent) ? newCurrent : s.longest;
+      set(streakRef, { current:newCurrent, longest:newLongest, lastCompleteDate:newLast });
+
+      let clawback = 0;
+      if(oldCurrent % 3 === 0) clawback += 1;
+      if(oldCurrent % 10 === 0) clawback += 5;
+      if(clawback > 0){
+        runTransaction(moneyRef, (current)=>{
+          let m = current || { balance:0 };
+          m.balance = Math.max(0, (m.balance || 0) - clawback);
+          return m;
+        }).then(()=>{
+          showToast("↩️ Corrected: -" + formatMoney(clawback) + " undone");
+        });
+      } else {
+        showToast("↩️ Today's streak credit undone");
+      }
+    }
+  });
+}
+
+function clearRoutineItem(period, taskId){
+  const today = todayStr();
+  if(!dayLog[period]) dayLog[period] = {};
+  dayLog[period][taskId] = false;
+  update(ref(db, "routineTracker/days/" + today + "/" + period), { [taskId]: false }).then(()=>{
+    maybeClawbackToday();
+    renderTasks();
+    renderChores();
+    renderTodaysActivity();
+  });
+}
+
+function clearChoreItem(choreId, amount){
+  toggleChore(choreId, amount);
+  setTimeout(renderTodaysActivity, 150);
+}
+
+function clearEverythingToday(){
+  const ok = window.confirm("Clear every checked item for today? This also undoes any streak or chore money earned today.");
+  if(!ok) return;
+  const today = todayStr();
+  const choreRefundTotal = chores
+    .filter(c => dayLog.paidChores && dayLog.paidChores[c.id])
+    .reduce((sum, c) => sum + Number(c.amount || 0), 0);
+
+  dayLog = { morning:{}, evening:{}, paidChores:{} };
+  set(ref(db, "routineTracker/days/" + today), {}).then(()=>{
+    renderTasks();
+    renderChores();
+    renderTodaysActivity();
+    maybeClawbackToday();
+    if(choreRefundTotal > 0){
+      runTransaction(moneyRef, (current)=>{
+        let m = current || { balance:0 };
+        m.balance = Math.max(0, (m.balance || 0) - choreRefundTotal);
+        return m;
+      });
+    }
+  });
+}
+document.getElementById("clearTodayBtn").addEventListener("click", clearEverythingToday);
+
+function renderTodaysActivity(){
+  const container = document.getElementById("todaysActivity");
+  container.innerHTML = "";
+  let anyItems = false;
+
+  ["morning","evening"].forEach(period=>{
+    (tasks[period] || []).forEach(t=>{
+      if(dayLog[period] && dayLog[period][t.id]){
+        anyItems = true;
+        const row = document.createElement("div");
+        row.className = "activity-row";
+        row.innerHTML =
+          '<div class="activity-emoji">' + t.emoji + '</div>' +
+          '<div class="activity-label">' + t.label + '</div>' +
+          '<div class="activity-tag">' + (period === "morning" ? "AM" : "PM") + '</div>' +
+          '<button class="activity-undo">Undo</button>';
+        row.querySelector(".activity-undo").addEventListener("click", ()=> clearRoutineItem(period, t.id));
+        container.appendChild(row);
+      }
+    });
+  });
+
+  chores.forEach(c=>{
+    if(dayLog.paidChores && dayLog.paidChores[c.id]){
+      anyItems = true;
+      const row = document.createElement("div");
+      row.className = "activity-row";
+      row.innerHTML =
+        '<div class="activity-emoji">' + c.emoji + '</div>' +
+        '<div class="activity-label">' + c.label + '</div>' +
+        '<div class="activity-tag">' + formatMoney(c.amount) + '</div>' +
+        '<button class="activity-undo">Undo</button>';
+      row.querySelector(".activity-undo").addEventListener("click", ()=> clearChoreItem(c.id, c.amount));
+      container.appendChild(row);
+    }
+  });
+
+  if(!anyItems){
+    container.innerHTML = '<div class="activity-empty">Nothing checked off yet today.</div>';
+  }
 }
 
 /* ---------- Render routine tasks ---------- */
@@ -738,6 +876,7 @@ function submitPin(){
 
 function openParentPanel(){
   renderHistory();
+  renderTodaysActivity();
   parentOverlay.classList.add("show");
 }
 document.getElementById("parentClose").addEventListener("click", ()=> parentOverlay.classList.remove("show"));
