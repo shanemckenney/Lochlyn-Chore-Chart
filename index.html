@@ -196,6 +196,30 @@
   }
   .activity-empty{ color:var(--muted); font-weight:700; font-size:13px; padding:8px 2px; }
 
+  .task-row.pending{ cursor:default; background:#FFF7EC; }
+  .task-row.pending .task-check{ border-color:var(--flame); background:transparent; }
+  .pending-tag{ font-size:12px; font-weight:800; color:var(--flame); text-transform:uppercase; letter-spacing:0.5px; }
+
+  .approval-card{
+    display:flex; gap:12px; align-items:center; padding:10px 2px;
+    border-bottom:1px solid rgba(0,0,0,0.06);
+  }
+  .approval-card:last-child{ border-bottom:none; }
+  .approval-thumb{
+    width:56px; height:56px; border-radius:12px; object-fit:cover; flex:0 0 auto;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  }
+  .approval-info{ flex:1; }
+  .approval-info .name{ font-family:'Fredoka', sans-serif; font-weight:600; font-size:15px; }
+  .approval-info .amt{ font-size:13px; color:var(--leaf); font-weight:800; }
+  .approval-btns{ display:flex; flex-direction:column; gap:6px; flex:0 0 auto; }
+  .approval-btns button{
+    font-family:'Fredoka', sans-serif; font-weight:600; font-size:12px; border:none;
+    border-radius:10px; padding:7px 12px; cursor:pointer;
+  }
+  .approve-btn{ background:var(--leaf); color:#fff; }
+  .reject-btn{ background:#F0EDE6; color:var(--flame-hot); }
+
   .edit-row{ display:flex; align-items:center; gap:8px; padding:8px 0; }
   .edit-row input{ flex:1; }
   .edit-row input.emoji-in{ max-width:52px; text-align:center; flex:0 0 auto; }
@@ -258,6 +282,8 @@
     <div class="tab" id="tabEvening" data-period="evening">🌙 Evening</div>
   </div>
 
+  <input type="file" id="chorePhotoInput" accept="image/*" capture="environment" style="display:none;">
+
   <div class="card">
     <div id="taskList"></div>
     <div class="celebrate-wrap" id="celebrateWrap">
@@ -299,6 +325,11 @@
     </div>
     <div class="btn-row">
       <button class="danger" id="resetMoneyBtn">Mark as Paid (reset to $0)</button>
+    </div>
+
+    <div class="panel-section">
+      <h3>📸 Pending Approvals</h3>
+      <div id="pendingApprovals"></div>
     </div>
 
     <div class="panel-section">
@@ -387,13 +418,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCjccEZyWBVjR_hTzQ2oSFEQWawcIyBfjs",
-  authDomain: "lochlyn-chore-chart.firebaseapp.com",
-  databaseURL: "https://lochlyn-chore-chart-default-rtdb.firebaseio.com",
-  projectId: "lochlyn-chore-chart",
-  storageBucket: "lochlyn-chore-chart.firebasestorage.app",
-  messagingSenderId: "458552344407",
-  appId: "1:458552344407:web:195db36abc1cffac698812"
+  apiKey: "PASTE_YOUR_API_KEY",
+  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://PASTE_YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "PASTE_YOUR_PROJECT",
+  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
 };
 
 const PARENT_PIN = "1234"; // change this to whatever PIN you want
@@ -511,6 +542,7 @@ function bindTodayListener(){
     renderTasks();
     renderChores();
     renderTodaysActivity();
+    renderPendingApprovals();
     checkCelebration();
   });
 }
@@ -648,9 +680,17 @@ function clearRoutineItem(period, taskId){
   });
 }
 
-function clearChoreItem(choreId, amount){
-  toggleChore(choreId, amount);
-  setTimeout(renderTodaysActivity, 150);
+function unapproveChore(choreId, amount){
+  runTransaction(moneyRef, (current)=>{
+    let m = current || { balance:0 };
+    m.balance = Math.max(0, (m.balance || 0) - amount);
+    return m;
+  }).then(()=>{
+    update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), { [choreId]: null }).then(()=>{
+      renderTodaysActivity();
+      showToast("↩️ Undone: -" + formatMoney(amount));
+    });
+  });
 }
 
 function clearEverythingToday(){
@@ -658,8 +698,8 @@ function clearEverythingToday(){
   if(!ok) return;
   const today = todayStr();
   const choreRefundTotal = chores
-    .filter(c => dayLog.paidChores && dayLog.paidChores[c.id])
-    .reduce((sum, c) => sum + Number(c.amount || 0), 0);
+    .filter(c => dayLog.paidChores && dayLog.paidChores[c.id] && dayLog.paidChores[c.id].status === "approved")
+    .reduce((sum, c) => sum + Number((dayLog.paidChores[c.id].amount != null ? dayLog.paidChores[c.id].amount : c.amount) || 0), 0);
 
   dayLog = { morning:{}, evening:{}, paidChores:{} };
   set(ref(db, "routineTracker/days/" + today), {}).then(()=>{
@@ -701,16 +741,18 @@ function renderTodaysActivity(){
   });
 
   chores.forEach(c=>{
-    if(dayLog.paidChores && dayLog.paidChores[c.id]){
+    const entry = dayLog.paidChores && dayLog.paidChores[c.id];
+    if(entry && entry.status === "approved"){
       anyItems = true;
+      const amt = entry.amount != null ? entry.amount : c.amount;
       const row = document.createElement("div");
       row.className = "activity-row";
       row.innerHTML =
         '<div class="activity-emoji">' + c.emoji + '</div>' +
         '<div class="activity-label">' + c.label + '</div>' +
-        '<div class="activity-tag">' + formatMoney(c.amount) + '</div>' +
+        '<div class="activity-tag">' + formatMoney(amt) + '</div>' +
         '<button class="activity-undo">Undo</button>';
-      row.querySelector(".activity-undo").addEventListener("click", ()=> clearChoreItem(c.id, c.amount));
+      row.querySelector(".activity-undo").addEventListener("click", ()=> unapproveChore(c.id, amt));
       container.appendChild(row);
     }
   });
@@ -760,33 +802,143 @@ function renderChores(){
     return;
   }
   chores.forEach(c=>{
-    const paid = !!(dayLog.paidChores && dayLog.paidChores[c.id]);
+    const entry = dayLog.paidChores && dayLog.paidChores[c.id];
+    const status = entry && entry.status;
     const row = document.createElement("div");
-    row.className = "task-row" + (paid ? " done" : "") + (unlocked ? "" : " locked");
-    row.innerHTML =
-      '<div class="task-emoji">' + c.emoji + '</div>' +
-      '<div class="task-label">' + c.label + '</div>' +
-      '<div class="task-amount">' + formatMoney(c.amount) + '</div>' +
-      '<div class="task-check">' + (paid ? "✓" : "") + '</div>';
-    if(unlocked){
-      row.addEventListener("click", ()=> toggleChore(c.id, c.amount));
+
+    if(status === "approved"){
+      row.className = "task-row done";
+      row.innerHTML =
+        '<div class="task-emoji">' + c.emoji + '</div>' +
+        '<div class="task-label">' + c.label + '</div>' +
+        '<div class="task-amount">' + formatMoney(c.amount) + '</div>' +
+        '<div class="task-check">✓</div>';
+    } else if(status === "pending"){
+      row.className = "task-row pending";
+      row.innerHTML =
+        '<div class="task-emoji">' + c.emoji + '</div>' +
+        '<div class="task-label">' + c.label + '</div>' +
+        '<div class="pending-tag">⏳ Waiting</div>';
+    } else {
+      row.className = "task-row" + (unlocked ? "" : " locked");
+      row.innerHTML =
+        '<div class="task-emoji">' + c.emoji + '</div>' +
+        '<div class="task-label">' + c.label + '</div>' +
+        '<div class="task-amount">' + formatMoney(c.amount) + '</div>' +
+        '<div class="task-check"></div>';
+      if(unlocked){
+        row.addEventListener("click", ()=> requestChorePhoto(c.id, c.amount));
+      }
     }
     container.appendChild(row);
   });
 }
 
-function toggleChore(choreId, amount){
+/* ---------- Photo capture + compression for chore submissions ---------- */
+let capturingChoreId = null;
+let capturingChoreAmount = 0;
+
+function requestChorePhoto(choreId, amount){
   ensureBoundToToday();
-  const today = todayStr();
-  const wasPaid = !!(dayLog.paidChores && dayLog.paidChores[choreId]);
-  update(ref(db, "routineTracker/days/" + today + "/paidChores"), { [choreId]: !wasPaid }).then(()=>{
-    runTransaction(moneyRef, (current)=>{
-      let m = current || { balance:0 };
-      m.balance = Math.max(0, (m.balance || 0) + (wasPaid ? -amount : amount));
-      return m;
+  capturingChoreId = choreId;
+  capturingChoreAmount = amount;
+  const input = document.getElementById("chorePhotoInput");
+  input.value = "";
+  input.click();
+}
+
+function compressImageFile(file, maxDim, quality){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Could not read photo"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Could not load photo"));
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(w > h && w > maxDim){ h = Math.round(h * (maxDim / w)); w = maxDim; }
+        else if(h > maxDim){ w = Math.round(w * (maxDim / h)); h = maxDim; }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("chorePhotoInput").addEventListener("change", (e)=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file || !capturingChoreId) return;
+  const choreId = capturingChoreId;
+  const amount = capturingChoreAmount;
+  showToast("📸 Sending photo…");
+  compressImageFile(file, 800, 0.6).then(dataUrl=>{
+    ensureBoundToToday();
+    update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), {
+      [choreId]: { status:"pending", photo:dataUrl, amount:amount, ts:Date.now() }
     }).then(()=>{
-      if(!wasPaid) showToast("💵 +" + formatMoney(amount) + " earned!");
+      showToast("✅ Sent to Dad for approval!");
     });
+  }).catch(()=>{
+    showToast("⚠️ Couldn't process that photo, try again");
+  });
+  capturingChoreId = null;
+});
+
+/* ---------- Parent approval / rejection ---------- */
+function renderPendingApprovals(){
+  const container = document.getElementById("pendingApprovals");
+  container.innerHTML = "";
+  const pending = chores
+    .map(c => ({ chore:c, entry: dayLog.paidChores && dayLog.paidChores[c.id] }))
+    .filter(x => x.entry && x.entry.status === "pending");
+
+  if(pending.length === 0){
+    container.innerHTML = '<div class="activity-empty">Nothing waiting on you right now.</div>';
+    return;
+  }
+  pending.forEach(({chore, entry})=>{
+    const card = document.createElement("div");
+    card.className = "approval-card";
+    card.innerHTML =
+      '<img class="approval-thumb" src="' + entry.photo + '" alt="chore photo">' +
+      '<div class="approval-info">' +
+        '<div class="name">' + chore.emoji + ' ' + chore.label + '</div>' +
+        '<div class="amt">' + formatMoney(entry.amount) + '</div>' +
+      '</div>' +
+      '<div class="approval-btns">' +
+        '<button class="approve-btn">✅ Approve</button>' +
+        '<button class="reject-btn">❌ Reject</button>' +
+      '</div>';
+    card.querySelector(".approve-btn").addEventListener("click", ()=> approveChore(chore.id));
+    card.querySelector(".reject-btn").addEventListener("click", ()=> rejectChore(chore.id));
+    container.appendChild(card);
+  });
+}
+
+function approveChore(choreId){
+  const entry = dayLog.paidChores && dayLog.paidChores[choreId];
+  if(!entry || entry.status !== "pending") return;
+  const amount = entry.amount || 0;
+  runTransaction(moneyRef, (current)=>{
+    let m = current || { balance:0 };
+    m.balance = (m.balance || 0) + amount;
+    return m;
+  }).then(()=>{
+    update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), {
+      [choreId]: { status:"approved", amount:amount, ts:Date.now() }
+    }).then(()=>{
+      showToast("✅ Approved! +" + formatMoney(amount));
+    });
+  });
+}
+
+function rejectChore(choreId){
+  update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), { [choreId]: null }).then(()=>{
+    showToast("↩️ Sent back — he can try again");
   });
 }
 
@@ -877,6 +1029,7 @@ function submitPin(){
 function openParentPanel(){
   renderHistory();
   renderTodaysActivity();
+  renderPendingApprovals();
   parentOverlay.classList.add("show");
 }
 document.getElementById("parentClose").addEventListener("click", ()=> parentOverlay.classList.remove("show"));
