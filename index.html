@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My Routine">
 <meta name="theme-color" content="#2E2A5C">
-<title>Routine Tracker</title>
+<title>My Routine & Life Skills</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -22,226 +22,209 @@
     --chalk:#FAF7F2;
     --ink:#1F2430;
     --muted:#8A93A6;
+    --soft:#F0EDE6;
+    --blue-soft:#E9F2FB;
+    --green-soft:#EAF7EE;
+    --gold-soft:#FFF6DA;
+    --pink-soft:#FFF0F2;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     min-height:100vh;
-    font-family:'Nunito', sans-serif;
+    font-family:'Nunito',sans-serif;
     color:var(--chalk);
-    display:flex; flex-direction:column; align-items:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     padding:20px 16px 56px;
-    transition:background 0.6s ease;
+    transition:background .6s ease;
     background:var(--sky);
-    background-image: radial-gradient(900px 600px at 90% -10%, rgba(255,255,255,0.14), transparent 60%);
+    background-image:radial-gradient(900px 600px at 90% -10%,rgba(255,255,255,.14),transparent 60%);
   }
-  body.evening{ background:var(--dusk); }
-  h1,h2,h3{font-family:'Fredoka', sans-serif; margin:0;}
-  .app{width:100%; max-width:520px;}
+  body.evening{background:var(--dusk);}
+  h1,h2,h3,h4{font-family:'Fredoka',sans-serif;margin:0;}
+  button,input,select,textarea{font:inherit;}
+  .app{width:100%;max-width:560px;}
 
-  .topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
-  .brand{display:flex; align-items:center; gap:10px;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .brand{display:flex;align-items:center;gap:10px;}
   .brand-icon{font-size:30px;}
-  .brand h1{font-size:20px; letter-spacing:0.3px;}
-  .brand p{margin:0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; color:rgba(255,255,255,0.75);}
-  .gear-btn{
-    background:rgba(255,255,255,0.14); border:none; border-radius:50%;
-    width:42px; height:42px; font-size:19px; color:#fff; cursor:pointer;
-  }
+  .brand h1{font-size:20px;letter-spacing:.3px;}
+  .brand p{margin:0;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.75);}
+  .gear-btn{background:rgba(255,255,255,.14);border:none;border-radius:50%;width:42px;height:42px;font-size:19px;color:#fff;cursor:pointer;}
 
   .streak-banner{
-    display:flex; align-items:center; gap:14px;
-    background:rgba(255,255,255,0.12);
-    border:1px solid rgba(255,255,255,0.18);
-    border-radius:20px; padding:14px 18px; margin-bottom:12px;
+    display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:14px 18px;margin-bottom:12px;
   }
-  .flame{font-size:38px; transition:transform .3s ease;}
+  .flame{font-size:38px;transition:transform .3s ease;}
   .flame.big{transform:scale(1.15);}
   .streak-nums{flex:1;}
-  .streak-count{font-family:'Fredoka', sans-serif; font-size:24px; line-height:1;}
-  .streak-sub{font-size:12px; color:rgba(255,255,255,0.75); font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-top:2px;}
-  .streak-best{font-size:12px; color:rgba(255,255,255,0.6); text-align:right;}
+  .streak-count{font-family:'Fredoka',sans-serif;font-size:24px;line-height:1;}
+  .streak-sub{font-size:12px;color:rgba(255,255,255,.75);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-top:2px;}
+  .streak-best{font-size:12px;color:rgba(255,255,255,.6);text-align:right;}
 
-  .money-chip{
-    display:flex; align-items:center; gap:8px;
-    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.18);
-    border-radius:16px; padding:10px 16px; margin-bottom:16px;
-    font-family:'Fredoka', sans-serif; font-weight:600; font-size:16px;
+  .xp-card{
+    background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:20px;
+    padding:15px 16px;margin-bottom:12px;
   }
-  .money-chip .coin{font-size:22px;}
+  .xp-top{display:flex;align-items:center;gap:10px;}
+  .xp-star{font-size:30px;}
+  .xp-main{flex:1;}
+  .xp-value{font-family:'Fredoka',sans-serif;font-size:22px;line-height:1.05;}
+  .xp-next{font-size:12px;color:rgba(255,255,255,.78);font-weight:800;margin-top:3px;}
+  .xp-match{font-family:'Fredoka',sans-serif;font-size:13px;text-align:right;}
+  .progress{height:10px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin-top:11px;}
+  .progress-fill{height:100%;background:#fff;border-radius:99px;transition:width .35s ease;}
 
-  .msg-banner{
-    display:none; background:var(--flame); color:#fff; border-radius:18px;
-    padding:14px 16px; margin-bottom:16px; align-items:flex-start; gap:10px;
-    font-weight:800; font-family:'Fredoka', sans-serif; font-size:15px;
-    box-shadow:0 10px 24px rgba(0,0,0,0.2);
-  }
+  .wallet-card{background:var(--chalk);color:var(--ink);border-radius:24px;padding:16px;margin-bottom:12px;box-shadow:0 14px 30px rgba(0,0,0,.18);}
+  .wallet-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+  .wallet-title-row h3{font-size:16px;color:var(--dusk);}
+  .wallet-total{font-size:12px;font-weight:800;color:var(--muted);}
+  .wallet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .wallet-bucket{border-radius:15px;padding:11px 8px;text-align:center;}
+  .wallet-bucket.spend{background:var(--blue-soft);}
+  .wallet-bucket.save{background:var(--green-soft);}
+  .wallet-bucket.give{background:var(--pink-soft);}
+  .wallet-bucket .emoji{font-size:20px;}
+  .wallet-bucket .amt{font-family:'Fredoka',sans-serif;font-size:18px;margin-top:2px;}
+  .wallet-bucket .lbl{font-size:10px;text-transform:uppercase;font-weight:900;color:var(--muted);letter-spacing:.7px;}
+  .ready-money{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--gold-soft);display:none;align-items:center;gap:8px;font-weight:800;font-size:13px;}
+  .ready-money.show{display:flex;}
+  .ready-money button{margin-left:auto;background:var(--gold);color:#2A2110;border:none;border-radius:11px;padding:8px 10px;font-weight:900;cursor:pointer;}
+
+  .msg-banner{display:none;background:var(--flame);color:#fff;border-radius:18px;padding:14px 16px;margin-bottom:16px;align-items:flex-start;gap:10px;font-weight:800;font-family:'Fredoka',sans-serif;font-size:15px;box-shadow:0 10px 24px rgba(0,0,0,.2);}
   .msg-banner .msg-emoji{font-size:22px;}
-  .msg-banner .msg-close{
-    margin-left:auto; background:rgba(255,255,255,0.25); border:none; color:#fff;
-    border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:13px; flex:0 0 auto;
-  }
+  .msg-banner .msg-close{margin-left:auto;background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:13px;flex:0 0 auto;}
 
-  .toast{
-    position:fixed; top:18px; left:50%; transform:translateX(-50%) translateY(-10px);
-    background:var(--gold); color:#2A2110; font-family:'Fredoka', sans-serif; font-weight:600;
-    padding:12px 22px; border-radius:40px; box-shadow:0 12px 28px rgba(0,0,0,0.3);
-    z-index:60; opacity:0; transition:opacity .3s ease, transform .3s ease; pointer-events:none;
-  }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--gold);color:#2A2110;font-family:'Fredoka',sans-serif;font-weight:600;padding:12px 22px;border-radius:40px;box-shadow:0 12px 28px rgba(0,0,0,.3);z-index:70;opacity:0;transition:opacity .3s ease,transform .3s ease;pointer-events:none;max-width:90vw;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  .tabs{display:flex; gap:8px; margin-bottom:16px;}
-  .tab{
-    flex:1; text-align:center; padding:12px 0;
-    border-radius:16px; font-family:'Fredoka', sans-serif; font-weight:600; font-size:15px;
-    background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.7);
-    cursor:pointer; border:2px solid transparent;
-  }
-  .tab.active{ background:#fff; color:var(--ink); border-color:var(--flame); }
+  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .tab{flex:1;text-align:center;padding:12px 0;border-radius:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);cursor:pointer;border:2px solid transparent;}
+  .tab.active{background:#fff;color:var(--ink);border-color:var(--flame);}
 
-  .card{
-    background:var(--chalk); color:var(--ink);
-    border-radius:26px; padding:20px 18px; box-shadow:0 20px 40px rgba(0,0,0,0.28);
-    margin-bottom:16px;
-  }
-  .card h3.card-title{ font-size:15px; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:8px; }
+  .card{background:var(--chalk);color:var(--ink);border-radius:26px;padding:20px 18px;box-shadow:0 20px 40px rgba(0,0,0,.28);margin-bottom:16px;}
+  .card h3.card-title{font-size:15px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px;}
+  .card-sub{font-size:12px;color:var(--muted);font-weight:700;margin:-2px 0 8px;}
 
-  .task-row{
-    display:flex; align-items:center; gap:14px;
-    padding:14px 8px; border-bottom:1px solid rgba(0,0,0,0.06);
-    cursor:pointer; user-select:none;
-  }
+  .task-row{display:flex;align-items:center;gap:14px;padding:14px 8px;border-bottom:1px solid rgba(0,0,0,.06);cursor:pointer;user-select:none;}
   .task-row:last-child{border-bottom:none;}
-  .task-emoji{font-size:30px; flex:0 0 auto;}
-  .task-label{flex:1; font-family:'Fredoka', sans-serif; font-weight:600; font-size:17px;}
-  .task-amount{font-family:'Fredoka', sans-serif; font-weight:600; font-size:14px; color:var(--leaf); margin-right:2px;}
-  .task-check{
-    width:34px; height:34px; border-radius:50%;
-    border:3px solid #D8DEE8; flex:0 0 auto;
-    display:flex; align-items:center; justify-content:center; font-size:17px; color:#fff;
-    transition:background .15s ease, border-color .15s ease, transform .15s ease;
+  .task-emoji{font-size:30px;flex:0 0 auto;}
+  .task-label{flex:1;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;}
+  .task-amount{font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:var(--leaf);margin-right:2px;}
+  .task-check{width:34px;height:34px;border-radius:50%;border:3px solid #D8DEE8;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;transition:background .15s ease,border-color .15s ease,transform .15s ease;}
+  .task-row.done .task-check{background:var(--leaf);border-color:var(--leaf);transform:scale(1.05);}
+  .task-row.done .task-label{color:var(--muted);text-decoration:line-through;}
+  .task-row.pending{cursor:default;background:#FFF7EC;}
+  .task-row.pending .task-check{border-color:var(--flame);background:transparent;}
+  .pending-tag{font-size:12px;font-weight:800;color:var(--flame);text-transform:uppercase;letter-spacing:.5px;}
+  .empty-tasks{text-align:center;color:var(--muted);font-weight:700;padding:20px 0;}
+  .celebrate-wrap{display:none;text-align:center;padding:6px 0 4px;}
+  .celebrate-emoji{font-size:44px;}
+  .celebrate-text{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--flame);margin-top:4px;}
+
+  .wish-row{padding:13px 8px;border-bottom:1px solid rgba(0,0,0,.06);}
+  .wish-row:last-child{border-bottom:none;}
+  .wish-head{display:flex;align-items:center;gap:10px;}
+  .wish-emoji{font-size:28px;}
+  .wish-name{font-family:'Fredoka',sans-serif;font-size:16px;flex:1;}
+  .wish-price{font-family:'Fredoka',sans-serif;color:var(--dusk);}
+  .wish-progress{height:8px;background:#E6E9EF;border-radius:99px;overflow:hidden;margin:8px 0 5px;}
+  .wish-progress > div{height:100%;background:var(--leaf);border-radius:99px;}
+  .wish-note{font-size:11px;font-weight:800;color:var(--muted);}
+  .wish-note.ready{color:var(--leaf);}
+
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:40;}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(15,15,25,.55);align-items:center;justify-content:center;z-index:60;padding:20px;}
+  .overlay.show{display:flex;}
+  .modal{background:var(--chalk);color:var(--ink);border-radius:24px;padding:24px 22px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,.4);}
+  .modal h2{font-size:22px;margin-bottom:14px;color:var(--dusk);}
+  .modal label{display:block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:14px 0 6px;}
+  .modal input[type=password],.modal input[type=text],.modal input[type=number],.modal select,.modal textarea{width:100%;padding:12px 14px;border-radius:12px;border:2px solid #E2E7EF;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;background:#fff;}
+  .modal input[type=checkbox]{transform:scale(1.15);}
+  .modal textarea{resize:vertical;min-height:70px;}
+  .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+  button.primary,button.ghost,button.small-add,button.danger,button.good{font-family:'Fredoka',sans-serif;font-weight:600;border:none;border-radius:14px;padding:12px 18px;cursor:pointer;font-size:15px;}
+  button.primary{background:var(--dusk);color:#fff;flex:1;}
+  button.ghost{background:transparent;color:var(--dusk);border:2px solid #E2E7EF;}
+  button.danger{background:var(--flame-hot);color:#fff;}
+  button.good{background:var(--leaf);color:#fff;}
+  button:disabled{opacity:.45;cursor:not-allowed;}
+  .pin-error,.form-error{color:var(--flame-hot);font-weight:800;font-size:13px;margin-top:8px;display:none;}
+
+  .panel-section{margin-top:20px;padding-top:16px;border-top:2px dashed #E2E7EF;}
+  .panel-section h3{font-size:16px;color:var(--dusk);margin-bottom:10px;}
+  .panel-note{font-size:12px;color:var(--muted);font-weight:700;margin:0 0 10px;}
+  .stat-grid{display:flex;gap:10px;flex-wrap:wrap;}
+  .stat-box{flex:1;min-width:100px;background:var(--soft);border-radius:14px;padding:12px;text-align:center;}
+  .stat-box.xp{background:var(--gold-soft);}
+  .stat-box.money{background:var(--green-soft);}
+  .stat-box .num{font-family:'Fredoka',sans-serif;font-size:22px;color:var(--dusk);}
+  .stat-box .lbl{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);}
+
+  .quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .xp-award-btn{border:none;border-radius:14px;background:var(--gold-soft);color:var(--ink);padding:12px 10px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer;text-align:left;}
+  .xp-award-btn span{display:block;font-size:11px;color:var(--muted);margin-top:2px;}
+
+  .history-row{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:700;font-size:14px;gap:8px;}
+  .history-row .dots{display:flex;gap:6px;}
+  .history-dot{width:12px;height:12px;border-radius:50%;background:#E2E7EF;}
+  .history-dot.on{background:var(--leaf);}
+
+  .activity-row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(0,0,0,.06);font-size:14px;}
+  .activity-row:last-child{border-bottom:none;}
+  .activity-emoji{font-size:20px;}
+  .activity-label{flex:1;font-weight:700;min-width:0;}
+  .activity-label small{display:block;color:var(--muted);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .activity-tag{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);letter-spacing:.5px;text-align:right;}
+  .activity-undo{background:var(--soft);color:var(--flame-hot);border:none;border-radius:10px;padding:6px 10px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;cursor:pointer;}
+  .activity-empty{color:var(--muted);font-weight:700;font-size:13px;padding:8px 2px;}
+
+  .approval-card{display:flex;gap:12px;align-items:center;padding:10px 2px;border-bottom:1px solid rgba(0,0,0,.06);}
+  .approval-card:last-child{border-bottom:none;}
+  .approval-thumb{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:0 0 auto;box-shadow:0 4px 10px rgba(0,0,0,.15);}
+  .approval-info{flex:1;}
+  .approval-info .name{font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;}
+  .approval-info .amt{font-size:13px;color:var(--leaf);font-weight:800;}
+  .approval-btns{display:flex;flex-direction:column;gap:6px;flex:0 0 auto;}
+  .approval-btns button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;border:none;border-radius:10px;padding:7px 12px;cursor:pointer;}
+  .approve-btn{background:var(--leaf);color:#fff;}
+  .reject-btn{background:var(--soft);color:var(--flame-hot);}
+
+  .edit-row{display:flex;align-items:center;gap:8px;padding:8px 0;flex-wrap:wrap;}
+  .edit-row input{flex:1;min-width:90px;}
+  .edit-row input.emoji-in{max-width:52px;text-align:center;flex:0 0 auto;}
+  select.emoji-select{max-width:150px;flex:0 0 auto;padding:10px 8px;border-radius:12px;border:2px solid #E2E7EF;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;background:#fff;}
+  .edit-row select.emoji-select{max-width:130px;}
+  input.emoji-custom{max-width:60px!important;text-align:center;}
+  .edit-row input.amount-in{max-width:82px;text-align:center;flex:0 0 auto;}
+  .edit-row .del{background:var(--flame-hot);color:#fff;border:none;border-radius:10px;width:32px;height:32px;cursor:pointer;flex:0 0 auto;}
+  .add-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+  .add-row input,.add-row select{flex:1;min-width:60px;}
+  button.small-add{background:var(--leaf);color:#fff;flex:0 0 auto;padding:12px 16px;}
+  .inline-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .inline-fields.three{grid-template-columns:repeat(3,1fr);}
+  .check-row{display:flex;align-items:center;gap:9px;font-weight:800;margin-top:12px;color:var(--dusk);}
+  .status-box{background:var(--soft);padding:12px 14px;border-radius:14px;font-size:13px;font-weight:800;line-height:1.45;}
+  .status-box.good{background:var(--green-soft);}
+  .status-box.warn{background:var(--gold-soft);}
+
+  .conn-dot{width:8px;height:8px;border-radius:50%;background:#E2E7EF;display:inline-block;margin-right:6px;}
+  .conn-dot.live{background:var(--leaf);}
+  .conn-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:700;}
+
+  @media (max-width:430px){
+    .wallet-grid{grid-template-columns:repeat(3,1fr);}
+    .wallet-bucket .amt{font-size:16px;}
+    .quick-grid{grid-template-columns:1fr;}
+    .inline-fields,.inline-fields.three{grid-template-columns:1fr;}
+    .modal{padding:20px 16px;}
   }
-  .task-row.done .task-check{ background:var(--leaf); border-color:var(--leaf); transform:scale(1.05); }
-  .task-row.done .task-label{ color:var(--muted); text-decoration:line-through; }
-
-  .task-row.locked{ cursor:default; opacity:0.55; }
-  .task-row.locked .task-check{ border-color:#E2E7EF; }
-
-  .empty-tasks{ text-align:center; color:var(--muted); font-weight:700; padding:20px 0; }
-
-  .lock-banner{
-    display:flex; align-items:center; gap:10px; background:#F0EDE6; border-radius:14px;
-    padding:12px 14px; font-weight:700; color:var(--muted); font-size:14px; margin-bottom:8px;
-  }
-
-  .celebrate-wrap{ display:none; text-align:center; padding:6px 0 4px; }
-  .celebrate-emoji{ font-size:44px; }
-  .celebrate-text{ font-family:'Fredoka', sans-serif; font-weight:600; color:var(--flame); margin-top:4px; }
-
-  #confettiCanvas{ position:fixed; inset:0; pointer-events:none; z-index:40; }
-
-  .overlay{
-    display:none; position:fixed; inset:0; background:rgba(15,15,25,0.55);
-    align-items:center; justify-content:center; z-index:50; padding:20px;
-  }
-  .overlay.show{ display:flex; }
-  .modal{
-    background:var(--chalk); color:var(--ink); border-radius:24px;
-    padding:24px 22px; width:100%; max-width:440px; max-height:88vh; overflow-y:auto;
-    box-shadow:0 30px 60px rgba(0,0,0,0.4);
-  }
-  .modal h2{font-size:22px; margin-bottom:14px; color:var(--dusk);}
-  .modal label{display:block; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin:14px 0 6px;}
-  .modal input[type=password], .modal input[type=text], .modal input[type=number], .modal textarea{
-    width:100%; padding:12px 14px; border-radius:12px; border:2px solid #E2E7EF;
-    font-family:'Nunito', sans-serif; font-size:15px; font-weight:700;
-  }
-  .modal textarea{ resize:vertical; min-height:70px; }
-  .btn-row{display:flex; gap:10px; margin-top:18px;}
-  button.primary, button.ghost, button.small-add, button.danger{
-    font-family:'Fredoka', sans-serif; font-weight:600; border:none; border-radius:14px;
-    padding:12px 18px; cursor:pointer; font-size:15px;
-  }
-  button.primary{ background:var(--dusk); color:#fff; flex:1; }
-  button.ghost{ background:transparent; color:var(--dusk); border:2px solid #E2E7EF; }
-  button.danger{ background:var(--flame-hot); color:#fff; }
-  .pin-error{ color:var(--flame-hot); font-weight:800; font-size:13px; margin-top:8px; display:none; }
-
-  .panel-section{ margin-top:20px; padding-top:16px; border-top:2px dashed #E2E7EF; }
-  .panel-section h3{ font-size:16px; color:var(--dusk); margin-bottom:10px; }
-
-  .stat-grid{ display:flex; gap:10px; flex-wrap:wrap; }
-  .stat-box{ flex:1; min-width:100px; background:#F0EDE6; border-radius:14px; padding:12px; text-align:center; }
-  .stat-box.owe{ background:#FFF1DE; }
-  .stat-box .num{ font-family:'Fredoka', sans-serif; font-size:22px; color:var(--dusk); }
-  .stat-box.owe .num{ color:var(--flame); }
-  .stat-box .lbl{ font-size:11px; font-weight:800; text-transform:uppercase; color:var(--muted); }
-
-  .history-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 2px; font-weight:700; font-size:14px; }
-  .history-row .dots{ display:flex; gap:6px; }
-  .history-dot{ width:12px; height:12px; border-radius:50%; background:#E2E7EF; }
-  .history-dot.on{ background:var(--leaf); }
-
-  .activity-row{
-    display:flex; align-items:center; gap:10px; padding:9px 2px;
-    border-bottom:1px solid rgba(0,0,0,0.06); font-size:14px;
-  }
-  .activity-row:last-child{ border-bottom:none; }
-  .activity-emoji{ font-size:20px; }
-  .activity-label{ flex:1; font-weight:700; }
-  .activity-tag{ font-size:11px; font-weight:800; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px; }
-  .activity-undo{
-    background:#F0EDE6; color:var(--flame-hot); border:none; border-radius:10px;
-    padding:6px 10px; font-family:'Fredoka', sans-serif; font-weight:600; font-size:12px; cursor:pointer;
-  }
-  .activity-empty{ color:var(--muted); font-weight:700; font-size:13px; padding:8px 2px; }
-
-  .task-row.pending{ cursor:default; background:#FFF7EC; }
-  .task-row.pending .task-check{ border-color:var(--flame); background:transparent; }
-  .pending-tag{ font-size:12px; font-weight:800; color:var(--flame); text-transform:uppercase; letter-spacing:0.5px; }
-
-  .approval-card{
-    display:flex; gap:12px; align-items:center; padding:10px 2px;
-    border-bottom:1px solid rgba(0,0,0,0.06);
-  }
-  .approval-card:last-child{ border-bottom:none; }
-  .approval-thumb{
-    width:56px; height:56px; border-radius:12px; object-fit:cover; flex:0 0 auto;
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
-  }
-  .approval-info{ flex:1; }
-  .approval-info .name{ font-family:'Fredoka', sans-serif; font-weight:600; font-size:15px; }
-  .approval-info .amt{ font-size:13px; color:var(--leaf); font-weight:800; }
-  .approval-btns{ display:flex; flex-direction:column; gap:6px; flex:0 0 auto; }
-  .approval-btns button{
-    font-family:'Fredoka', sans-serif; font-weight:600; font-size:12px; border:none;
-    border-radius:10px; padding:7px 12px; cursor:pointer;
-  }
-  .approve-btn{ background:var(--leaf); color:#fff; }
-  .reject-btn{ background:#F0EDE6; color:var(--flame-hot); }
-
-  .edit-row{ display:flex; align-items:center; gap:8px; padding:8px 0; }
-  .edit-row input{ flex:1; }
-  .edit-row input.emoji-in{ max-width:52px; text-align:center; flex:0 0 auto; }
-  select.emoji-select{
-    max-width:150px; flex:0 0 auto; padding:10px 8px; border-radius:12px; border:2px solid #E2E7EF;
-    font-family:'Nunito', sans-serif; font-weight:700; font-size:14px; background:#fff;
-  }
-  .edit-row select.emoji-select{ max-width:130px; }
-  input.emoji-custom{ max-width:60px !important; text-align:center; }
-  .edit-row input.amount-in{ max-width:70px; text-align:center; flex:0 0 auto; }
-  .edit-row .del{ background:var(--flame-hot); color:#fff; border:none; border-radius:10px; width:32px; height:32px; cursor:pointer; flex:0 0 auto; }
-  .add-row{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-  .add-row input{ flex:1; min-width:60px; }
-  button.small-add{ background:var(--leaf); color:#fff; flex:0 0 auto; padding:12px 16px; }
-
-  .conn-dot{ width:8px; height:8px; border-radius:50%; background:#E2E7EF; display:inline-block; margin-right:6px; }
-  .conn-dot.live{ background:var(--leaf); }
-  .conn-label{ font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; }
 </style>
 </head>
 <body>
-
 <canvas id="confettiCanvas"></canvas>
 <div class="toast" id="toast"></div>
 
@@ -254,27 +237,55 @@
         <p><span class="conn-dot" id="connDot"></span><span class="conn-label" id="connLabel">connecting…</span></p>
       </div>
     </div>
-    <button class="gear-btn" id="gearBtn">⚙️</button>
+    <button class="gear-btn" id="gearBtn" aria-label="Parent dashboard">⚙️</button>
   </div>
 
   <div class="streak-banner">
     <div class="flame" id="flameIcon">🔥</div>
     <div class="streak-nums">
       <div class="streak-count" id="streakCount">0 day streak</div>
-      <div class="streak-sub">Keep it going!</div>
+      <div class="streak-sub">Responsibilities streak</div>
     </div>
     <div class="streak-best" id="streakBest">Best: 0</div>
   </div>
 
-  <div class="money-chip">
-    <div class="coin">💰</div>
-    <div id="moneyChipText">$0.00 saved up</div>
+  <div class="xp-card">
+    <div class="xp-top">
+      <div class="xp-star">⭐</div>
+      <div class="xp-main">
+        <div class="xp-value" id="xpValue">0 XP</div>
+        <div class="xp-next" id="xpNext">Experience Points grow when you practice important skills.</div>
+      </div>
+      <div class="xp-match" id="xpMatch">Dad Match<br>$0</div>
+    </div>
+    <div class="progress"><div class="progress-fill" id="xpProgress" style="width:0%"></div></div>
+  </div>
+
+  <div class="wallet-card">
+    <div class="wallet-title-row">
+      <h3>💰 My Money</h3>
+      <div class="wallet-total" id="walletTotal">Total $0.00</div>
+    </div>
+    <div class="wallet-grid">
+      <div class="wallet-bucket spend"><div class="emoji">🛍️</div><div class="amt" id="walletSpend">$0.00</div><div class="lbl">Spend</div></div>
+      <div class="wallet-bucket save"><div class="emoji">🐷</div><div class="amt" id="walletSave">$0.00</div><div class="lbl">Save</div></div>
+      <div class="wallet-bucket give"><div class="emoji">❤️</div><div class="amt" id="walletGive">$0.00</div><div class="lbl">Give</div></div>
+    </div>
+    <div class="ready-money" id="readyMoney">
+      <span>💰 <span id="readyMoneyText">$0.00 ready to sort</span></span>
+      <button id="openAllocateBtn">Sort it</button>
+    </div>
   </div>
 
   <div class="msg-banner" id="msgBanner">
     <div class="msg-emoji">💬</div>
     <div id="msgText"></div>
     <button class="msg-close" id="msgClose">✕</button>
+  </div>
+
+  <div class="card" id="wishCard">
+    <h3 class="card-title">🎯 Things I'm Saving For</h3>
+    <div id="wishList"></div>
   </div>
 
   <div class="tabs">
@@ -285,6 +296,8 @@
   <input type="file" id="chorePhotoInput" accept="image/*" capture="environment" style="display:none;">
 
   <div class="card">
+    <h3 class="card-title">✅ My Responsibilities</h3>
+    <div class="card-sub">These are things I do because I'm part of the family.</div>
     <div id="taskList"></div>
     <div class="celebrate-wrap" id="celebrateWrap">
       <div class="celebrate-emoji">🎉</div>
@@ -293,9 +306,27 @@
   </div>
 
   <div class="card">
-    <h3 class="card-title">💵 Paid Chores</h3>
-    <div id="lockBanner" class="lock-banner">🔒 Finish today's morning routine to unlock these!</div>
+    <h3 class="card-title">💼 Jobs I Can Choose</h3>
+    <div class="card-sub">Extra work earns real money. Pick a job when you want to earn more.</div>
     <div id="choreList"></div>
+  </div>
+</div>
+
+<!-- CHILD MONEY ALLOCATION -->
+<div class="overlay" id="allocateOverlay">
+  <div class="modal">
+    <h2>💰 Sort My Money</h2>
+    <div class="status-box warn" id="allocateAvailable">You have $0.00 ready to sort.</div>
+    <div class="inline-fields three">
+      <div><label for="allocSpend">🛍️ Spend</label><input type="number" id="allocSpend" min="0" step="0.01" value="0"></div>
+      <div><label for="allocSave">🐷 Save</label><input type="number" id="allocSave" min="0" step="0.01" value="0"></div>
+      <div><label for="allocGive">❤️ Give</label><input type="number" id="allocGive" min="0" step="0.01" value="0"></div>
+    </div>
+    <div class="form-error" id="allocateError"></div>
+    <div class="btn-row">
+      <button class="ghost" id="allocateCancel">Cancel</button>
+      <button class="primary" id="allocateSaveBtn">Move My Money</button>
+    </div>
   </div>
 </div>
 
@@ -320,24 +351,79 @@
 
     <div class="stat-grid">
       <div class="stat-box"><div class="num" id="statCurrent">0</div><div class="lbl">Current streak</div></div>
-      <div class="stat-box"><div class="num" id="statBest">0</div><div class="lbl">Best streak</div></div>
-      <div class="stat-box owe"><div class="num" id="statOwe">$0.00</div><div class="lbl">You owe him</div></div>
-    </div>
-    <div class="btn-row">
-      <button class="danger" id="resetMoneyBtn">Mark as Paid (reset to $0)</button>
+      <div class="stat-box xp"><div class="num" id="statXp">0</div><div class="lbl">Available XP</div></div>
+      <div class="stat-box money"><div class="num" id="statWallet">$0.00</div><div class="lbl">Total money</div></div>
+      <div class="stat-box"><div class="num" id="statLifetimeXp">0</div><div class="lbl">Lifetime XP</div></div>
     </div>
 
     <div class="panel-section">
-      <h3>📸 Pending Approvals</h3>
+      <h3>⭐ Award Experience Points</h3>
+      <p class="panel-note">One tap in the moment. XP recognizes growth and skills — not basic chores.</p>
+      <div class="quick-grid" id="xpQuickButtons"></div>
+      <div class="add-row">
+        <input type="number" id="customXpAmount" min="1" step="1" placeholder="XP">
+        <input type="text" id="customXpReason" placeholder="Custom reason">
+        <button class="small-add" id="customXpBtn">+ Award</button>
+      </div>
+      <div id="xpRecent"></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>📸 Pending Job Approvals</h3>
       <div id="pendingApprovals"></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>💵 Weekly Allowance</h3>
+      <div class="status-box" id="allowanceStatus">Checking this week…</div>
+      <div class="btn-row">
+        <button class="good" id="payAllowanceBtn">Pay Weekly Allowance</button>
+        <button class="ghost" id="overrideAllowanceBtn">Parent Override</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <h3>🏦 Monthly Family Savings</h3>
+      <p class="panel-note">Moves the contribution from Spend to Save, then Dad matches it into Save.</p>
+      <div class="status-box" id="savingsStatus">Ready.</div>
+      <div class="btn-row"><button class="good" id="runSavingsBtn">Run Savings Match</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>🛒 Record a Purchase / Dad Match</h3>
+      <label for="purchaseWishSelect">Wish list item</label>
+      <select id="purchaseWishSelect"><option value="">Custom purchase…</option></select>
+      <label for="purchaseDescription">Description</label>
+      <input type="text" id="purchaseDescription" placeholder="LEGO set">
+      <div class="inline-fields">
+        <div><label for="purchasePrice">Item price</label><input type="number" id="purchasePrice" min="0" step="0.01" placeholder="$"></div>
+        <div><label for="purchaseChild">From his Spend</label><input type="number" id="purchaseChild" min="0" step="0.01" placeholder="$"></div>
+      </div>
+      <div class="status-box" id="purchaseMatchPreview">Dad Match and XP cost will appear here.</div>
+      <div class="form-error" id="purchaseError"></div>
+      <div class="btn-row"><button class="primary" id="recordPurchaseBtn">Record Purchase</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>💰 Manual Money Adjustment</h3>
+      <p class="panel-note">For cash gifts, corrections, or money handled outside the app.</p>
+      <div class="inline-fields">
+        <div><label for="manualBucket">Bucket</label><select id="manualBucket"><option value="unallocated">Ready to Sort</option><option value="spend">Spend</option><option value="save">Save</option><option value="give">Give</option></select></div>
+        <div><label for="manualAmount">Amount (+ or -)</label><input type="number" id="manualAmount" step="0.01" placeholder="5.00"></div>
+      </div>
+      <label for="manualReason">Reason</label><input type="text" id="manualReason" placeholder="Birthday money">
+      <div class="btn-row"><button class="ghost" id="manualMoneyBtn">Apply Adjustment</button></div>
     </div>
 
     <div class="panel-section">
       <h3>Today's Activity</h3>
       <div id="todaysActivity"></div>
-      <div class="btn-row">
-        <button class="danger" id="clearTodayBtn">Clear Everything for Today</button>
-      </div>
+      <div class="btn-row"><button class="danger" id="clearTodayBtn">Clear Everything for Today</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>Recent Money Activity</h3>
+      <div id="transactionList"></div>
     </div>
 
     <div class="panel-section">
@@ -347,955 +433,777 @@
 
     <div class="panel-section">
       <h3>Send him a message</h3>
-      <textarea id="msgInput" placeholder="Great job this morning, buddy! 🎉"></textarea>
-      <div class="btn-row">
-        <button class="primary" id="sendMsgBtn">Send message</button>
+      <textarea id="msgInput" placeholder="Great job finding a Plan B today! ⭐"></textarea>
+      <div class="btn-row"><button class="primary" id="sendMsgBtn">Send message</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>⚙️ Allowance Settings</h3>
+      <div class="inline-fields">
+        <div><label for="allowanceAmount">Weekly amount</label><input type="number" id="allowanceAmount" min="0" step="0.5"></div>
+        <div><label for="allowanceDays">Complete days required</label><input type="number" id="allowanceDays" min="1" max="7" step="1"></div>
+      </div>
+      <div class="btn-row"><button class="ghost" id="saveAllowanceConfigBtn">Save Allowance Settings</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>⚙️ Savings Settings</h3>
+      <label for="savingsContribution">Monthly child contribution</label>
+      <input type="number" id="savingsContribution" min="0" step="0.5">
+      <div class="btn-row"><button class="ghost" id="saveSavingsConfigBtn">Save Savings Settings</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>⭐ Edit XP Buttons</h3>
+      <div id="editXpReasons"></div>
+      <div class="add-row">
+        <input type="text" id="addXpEmoji" placeholder="⭐" style="max-width:60px;">
+        <input type="text" id="addXpLabel" placeholder="New XP reason">
+        <input type="number" class="amount-in" id="addXpAmount" placeholder="XP" min="1" step="1">
+        <button class="small-add" id="addXpBtn">+ Add</button>
       </div>
     </div>
 
     <div class="panel-section">
-      <h3>☀️ Edit morning tasks</h3>
+      <h3>🤝 Dad Match Tiers</h3>
+      <p class="panel-note">The smallest tier that covers the requested match is used. Above the highest tier, XP scales per extra dollar — so there is no hard cap.</p>
+      <div id="editMatchTiers"></div>
+      <div class="add-row">
+        <input type="number" id="addMatchDollars" placeholder="Match $" min="1" step="1">
+        <input type="number" id="addMatchXp" placeholder="XP cost" min="1" step="1">
+        <button class="small-add" id="addMatchTierBtn">+ Tier</button>
+      </div>
+      <label for="aboveTierRate">XP per $ above highest tier</label>
+      <input type="number" id="aboveTierRate" min="1" step="1">
+      <div class="check-row"><input type="checkbox" id="consumeXpOnMatch"><label for="consumeXpOnMatch" style="margin:0;text-transform:none;letter-spacing:0;color:var(--dusk);font-size:13px;">Using Dad Match spends available XP (lifetime XP stays)</label></div>
+      <div class="btn-row"><button class="ghost" id="saveMatchConfigBtn">Save Dad Match Settings</button></div>
+    </div>
+
+    <div class="panel-section">
+      <h3>🎯 Edit Wish List</h3>
+      <div id="editWishlist"></div>
+      <div class="add-row">
+        <input type="text" id="addWishEmoji" placeholder="🎁" style="max-width:60px;">
+        <input type="text" id="addWishLabel" placeholder="What he wants">
+        <input type="number" class="amount-in" id="addWishPrice" placeholder="$" min="0" step="0.01">
+        <button class="small-add" id="addWishBtn">+ Add</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <h3>☀️ Edit Morning Responsibilities</h3>
       <div id="editMorning"></div>
       <div class="add-row">
         <select class="emoji-in emoji-select" id="addMorningEmoji"></select>
         <input type="text" class="emoji-in emoji-custom" id="addMorningEmojiCustom" placeholder="🪄" style="display:none;">
-        <input type="text" id="addMorningLabel" placeholder="New task name">
+        <input type="text" id="addMorningLabel" placeholder="New responsibility">
         <button class="small-add" id="addMorningBtn">+ Add</button>
       </div>
     </div>
 
     <div class="panel-section">
-      <h3>🌙 Edit evening tasks</h3>
+      <h3>🌙 Edit Evening Responsibilities</h3>
       <div id="editEvening"></div>
       <div class="add-row">
         <select class="emoji-in emoji-select" id="addEveningEmoji"></select>
         <input type="text" class="emoji-in emoji-custom" id="addEveningEmojiCustom" placeholder="🪄" style="display:none;">
-        <input type="text" id="addEveningLabel" placeholder="New task name">
+        <input type="text" id="addEveningLabel" placeholder="New responsibility">
         <button class="small-add" id="addEveningBtn">+ Add</button>
       </div>
     </div>
 
     <div class="panel-section">
-      <h3>💵 Edit paid chores</h3>
+      <h3>💼 Edit Optional Jobs</h3>
       <div id="editChores"></div>
       <div class="add-row">
         <select class="emoji-in emoji-select" id="addChoreEmoji"></select>
         <input type="text" class="emoji-in emoji-custom" id="addChoreEmojiCustom" placeholder="🪄" style="display:none;">
-        <input type="text" id="addChoreLabel" placeholder="Chore name">
+        <input type="text" id="addChoreLabel" placeholder="Job name">
         <input type="number" class="amount-in" id="addChoreAmount" placeholder="$" min="0" step="0.5">
         <button class="small-add" id="addChoreBtn">+ Add</button>
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="ghost" id="parentClose">Close</button>
-    </div>
+    <div class="btn-row"><button class="ghost" id="parentClose">Close</button></div>
   </div>
 </div>
 
 <script type="module">
 /* =========================================================================
-   FIREBASE SETUP — paste your project's config below.
-   Realtime Database security rules (Firebase console > Realtime Database > Rules)
-   suggested for a home-only, single-family tool:
+   FIREBASE SETUP
+   This keeps the same routineTracker root as the original app.
 
-   {
-     "rules": {
-       "routineTracker": {
-         ".read": true,
-         ".write": true
-       }
-     }
-   }
-
-   This is intentionally open (no auth) since it's for home use on your own
-   Firebase project. Don't reuse this database for anything sensitive — real
-   dollar amounts live here, but only as numbers you control and reset yourself.
+   IMPORTANT: Your current rules are intentionally open for a private/home-only
+   single-family Firebase project. Do not reuse this database for sensitive data.
+   The parent PIN is a convenience gate in the browser, not real authentication.
    ========================================================================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getDatabase, ref, onValue, set, get, update, runTransaction, off
+  getDatabase, ref, onValue, set, get, update, runTransaction, push, remove
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://PASTE_YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "PASTE_YOUR_PROJECT",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyCjccEZyWBVjR_hTzQ2oSFEQWawcIyBfjs",
+  authDomain: "lochlyn-chore-chart.firebaseapp.com",
+  databaseURL: "https://lochlyn-chore-chart-default-rtdb.firebaseio.com",
+  projectId: "lochlyn-chore-chart",
+  storageBucket: "lochlyn-chore-chart.firebasestorage.app",
+  messagingSenderId: "458552344407",
+  appId: "1:458552344407:web:195db36abc1cffac698812"
 };
 
-const PARENT_PIN = "1234"; // change this to whatever PIN you want
+const PARENT_PIN = "1234"; // change this
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const ROOT = "routineTracker";
 
 /* ---------- Helpers ---------- */
-function todayStr(){
-  const d = new Date();
-  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+function todayStr(date=new Date()){
+  return date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
 }
 function dateStrOffset(offsetDays){
-  const d = new Date();
-  d.setDate(d.getDate() + offsetDays);
-  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  const d=new Date(); d.setDate(d.getDate()+offsetDays); return todayStr(d);
 }
-function formatMoney(n){
-  return "$" + (Math.round((n || 0) * 100) / 100).toFixed(2);
+function parseLocalDate(str){ return new Date(str+"T00:00:00"); }
+function formatMoney(n){ return "$"+(Math.round((Number(n)||0)*100)/100).toFixed(2); }
+function moneyRound(n){ return Math.round((Number(n)||0)*100)/100; }
+function clamp(n,min,max){ return Math.min(max,Math.max(min,n)); }
+function escapeAttr(str){ return String(str||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;"); }
+function escapeHtml(str){
+  return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function monthKey(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"); }
+function weekStartStr(date=new Date()){
+  const d=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+  const day=d.getDay();
+  const delta=day===0?-6:1-day;
+  d.setDate(d.getDate()+delta);
+  return todayStr(d);
+}
+function dateRangeFrom(startStr,count){
+  const start=parseLocalDate(startStr); const arr=[];
+  for(let i=0;i<count;i++){ const d=new Date(start); d.setDate(d.getDate()+i); arr.push(todayStr(d)); }
+  return arr;
+}
+function nowLabel(ts){
+  const d=new Date(ts||Date.now());
+  return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
 }
 
-const DEFAULT_TASKS = {
-  morning: [
-    { id:"m1", emoji:"🪥", label:"Brush teeth" },
-    { id:"m2", emoji:"🛏️", label:"Make bed" },
-    { id:"m3", emoji:"👕", label:"Get dressed" },
-    { id:"m4", emoji:"🥣", label:"Eat breakfast" },
-    { id:"m5", emoji:"🎒", label:"Pack backpack" }
+const DEFAULT_TASKS={
+  morning:[
+    {id:"m1",emoji:"🪥",label:"Brush teeth"},
+    {id:"m2",emoji:"🛏️",label:"Make bed"},
+    {id:"m3",emoji:"👕",label:"Get dressed"},
+    {id:"m4",emoji:"🥣",label:"Eat breakfast"},
+    {id:"m5",emoji:"🎒",label:"Pack backpack"}
   ],
-  evening: [
-    { id:"e1", emoji:"🛁", label:"Bath time" },
-    { id:"e2", emoji:"🧸", label:"Tidy up toys" },
-    { id:"e3", emoji:"🪥", label:"Brush teeth" },
-    { id:"e4", emoji:"👖", label:"Pajamas on" },
-    { id:"e5", emoji:"📖", label:"Reading time" }
+  evening:[
+    {id:"e1",emoji:"🛁",label:"Bath time"},
+    {id:"e2",emoji:"🧸",label:"Tidy up toys"},
+    {id:"e3",emoji:"🪥",label:"Brush teeth"},
+    {id:"e4",emoji:"👖",label:"Pajamas on"},
+    {id:"e5",emoji:"📖",label:"Reading time"}
   ]
 };
-const DEFAULT_CHORES = [
-  { id:"c1", emoji:"🧹", label:"Sweep the porch", amount:1 },
-  { id:"c2", emoji:"🐶", label:"Feed the dog", amount:0.5 },
-  { id:"c3", emoji:"🗑️", label:"Take out trash", amount:1 }
+const DEFAULT_CHORES=[
+  {id:"c1",emoji:"🧹",label:"Sweep the porch",amount:1},
+  {id:"c2",emoji:"🍽️",label:"Help with dishes",amount:1},
+  {id:"c3",emoji:"🗑️",label:"Take out trash",amount:1}
 ];
+const DEFAULT_XP_REASONS=[
+  {id:"planB",emoji:"🔄",label:"Handled Plan B",amount:10},
+  {id:"solve",emoji:"🧠",label:"Solved it himself",amount:10},
+  {id:"acceptedNo",emoji:"👍",label:"Accepted no appropriately",amount:10},
+  {id:"tablet",emoji:"🎮",label:"Tablet off without arguing",amount:5},
+  {id:"persist",emoji:"💪",label:"Kept trying when frustrated",amount:10},
+  {id:"kind",emoji:"❤️",label:"Showed kindness",amount:5},
+  {id:"truth",emoji:"🗣️",label:"Told the truth when hard",amount:10},
+  {id:"help",emoji:"🙌",label:"Helped without being asked",amount:5}
+];
+const DEFAULT_DAD_MATCH={
+  tiers:[
+    {id:"dm5",maxMatch:5,xpCost:50},
+    {id:"dm10",maxMatch:10,xpCost:100},
+    {id:"dm25",maxMatch:25,xpCost:250},
+    {id:"dm50",maxMatch:50,xpCost:500},
+    {id:"dm100",maxMatch:100,xpCost:1000}
+  ],
+  xpPerDollarAboveHighest:10,
+  consumeXp:true
+};
+const DEFAULT_ALLOWANCE={weeklyAmount:5,requiredDays:5};
+const DEFAULT_SAVINGS={monthlyContribution:3};
+const DEFAULT_WALLET={spend:0,save:0,give:0,unallocated:0,lifetimeEarned:0};
+const DEFAULT_XP={available:0,lifetime:0};
 
-/* ---------- Curated icon choices for the emoji picker ---------- */
-const EMOJI_CHOICES = [
-  ["🪥","Toothbrush"], ["🦷","Teeth"], ["🛁","Bath"], ["🚿","Shower"],
-  ["🛏️","Bed"], ["👕","Shirt"], ["👖","Pants/PJs"], ["🧦","Socks"],
-  ["👟","Shoes"], ["🎒","Backpack"], ["🥣","Cereal"], ["🍽️","Meal/Dishes"],
-  ["🥪","Lunch"], ["📖","Reading"], ["📚","Homework"], ["✏️","Schoolwork"],
-  ["🧸","Toys"], ["🧹","Sweeping"], ["🧺","Laundry"], ["🗑️","Trash"],
-  ["🧽","Cleaning"], ["🧴","Soap/Lotion"], ["🖍️","Coloring/Art"], ["💊","Medicine"],
-  ["🐶","Dog"], ["🐱","Cat"], ["🪴","Plant"], ["🌱","Watering"],
-  ["🚗","Car"], ["🚲","Bike"], ["⚽","Soccer"], ["🏆","Trophy"],
-  ["🛡️","Badge"], ["⭐","Star"], ["🌟","Sparkle"], ["☀️","Sun/Morning"],
-  ["🌙","Moon/Night"], ["⏰","Alarm Clock"], ["💰","Money"], ["📦","Organize"],
-  ["🎮","Game Time"], ["🪟","Window"], ["🧻","Tidy Up"], ["🎒","Get Ready"]
+const EMOJI_CHOICES=[
+  ["🪥","Toothbrush"],["🦷","Teeth"],["🛁","Bath"],["🚿","Shower"],["🛏️","Bed"],["👕","Shirt"],["👖","Pants/PJs"],["🧦","Socks"],["👟","Shoes"],["🎒","Backpack"],["🥣","Cereal"],["🍽️","Meal/Dishes"],["🥪","Lunch"],["📖","Reading"],["📚","Homework"],["✏️","Schoolwork"],["🧸","Toys"],["🧹","Sweeping"],["🧺","Laundry"],["🗑️","Trash"],["🧽","Cleaning"],["🧴","Soap/Lotion"],["🖍️","Coloring/Art"],["💊","Medicine"],["🐶","Dog"],["🐱","Cat"],["🪴","Plant"],["🌱","Watering"],["🚗","Car"],["🚲","Bike"],["⚽","Soccer"],["🏆","Trophy"],["🛡️","Badge"],["⭐","Star"],["🌟","Sparkle"],["☀️","Sun/Morning"],["🌙","Moon/Night"],["⏰","Alarm Clock"],["💰","Money"],["📦","Organize"],["🎮","Game Time"],["🪟","Window"],["🧻","Tidy Up"],["🎁","Gift"]
 ];
 function emojiOptionsHTML(selectedEmoji){
-  return EMOJI_CHOICES.map(([e,l])=>
-    '<option value="' + e + '"' + (e === selectedEmoji ? ' selected' : '') + '>' + e + ' ' + l + '</option>'
-  ).join("") + '<option value="__custom__">✏️ Type my own…</option>';
+  return EMOJI_CHOICES.map(([e,l])=>'<option value="'+e+'"'+(e===selectedEmoji?' selected':'')+'>'+e+' '+l+'</option>').join("")+'<option value="__custom__">✏️ Type my own…</option>';
 }
-function populateEmojiSelect(selectEl, currentEmoji){
-  const inList = EMOJI_CHOICES.some(([e]) => e === currentEmoji);
-  selectEl.innerHTML = emojiOptionsHTML(inList ? currentEmoji : null);
-  if(!inList && currentEmoji){
-    selectEl.value = "__custom__";
+function populateEmojiSelect(selectEl,currentEmoji){
+  const inList=EMOJI_CHOICES.some(([e])=>e===currentEmoji);
+  selectEl.innerHTML=emojiOptionsHTML(inList?currentEmoji:null);
+  if(!inList&&currentEmoji) selectEl.value="__custom__";
+}
+
+let tasks=JSON.parse(JSON.stringify(DEFAULT_TASKS));
+let chores=JSON.parse(JSON.stringify(DEFAULT_CHORES));
+let xpReasons=JSON.parse(JSON.stringify(DEFAULT_XP_REASONS));
+let dadMatch=JSON.parse(JSON.stringify(DEFAULT_DAD_MATCH));
+let allowanceConfig={...DEFAULT_ALLOWANCE};
+let savingsConfig={...DEFAULT_SAVINGS};
+let wishlist=[];
+let dayLog={morning:{},evening:{},paidChores:{}};
+let streak={current:0,longest:0,lastCompleteDate:null};
+let wallet={...DEFAULT_WALLET};
+let xp={...DEFAULT_XP};
+let xpHistory={};
+let transactions={};
+let currentPeriod="morning";
+let boundDate=todayStr();
+let unbindTodayListener=null;
+
+/* ---------- Firebase refs ---------- */
+const tasksRef=ref(db,ROOT+"/config/tasks");
+const choresRef=ref(db,ROOT+"/config/paidChores");
+const xpReasonsRef=ref(db,ROOT+"/config/xpReasons");
+const dadMatchRef=ref(db,ROOT+"/config/dadMatch");
+const allowanceConfigRef=ref(db,ROOT+"/config/allowance");
+const savingsConfigRef=ref(db,ROOT+"/config/savings");
+const wishlistRef=ref(db,ROOT+"/config/wishlist");
+const streakRef=ref(db,ROOT+"/streak");
+const walletRef=ref(db,ROOT+"/wallet");
+const xpRef=ref(db,ROOT+"/xp");
+const xpHistoryRef=ref(db,ROOT+"/xpHistory");
+const transactionsRef=ref(db,ROOT+"/transactions");
+const allowancePaymentsRef=ref(db,ROOT+"/allowancePayments");
+const savingsMonthsRef=ref(db,ROOT+"/savingsMonths");
+const legacyMoneyRef=ref(db,ROOT+"/money");
+const msgRef=ref(db,ROOT+"/parentMessage");
+
+/* ---------- Connection ---------- */
+const connDot=document.getElementById("connDot");
+const connLabel=document.getElementById("connLabel");
+onValue(ref(db,".info/connected"),(snap)=>{
+  const connected=snap.val()===true;
+  connDot.classList.toggle("live",connected);
+  connLabel.textContent=connected?"live":"offline";
+});
+
+/* ---------- Seed + migration ---------- */
+async function seedDefaults(){
+  const seeds=[
+    [tasksRef,DEFAULT_TASKS],[choresRef,DEFAULT_CHORES],[xpReasonsRef,DEFAULT_XP_REASONS],
+    [dadMatchRef,DEFAULT_DAD_MATCH],[allowanceConfigRef,DEFAULT_ALLOWANCE],[savingsConfigRef,DEFAULT_SAVINGS],
+    [xpRef,DEFAULT_XP]
+  ];
+  for(const [r,v] of seeds){ const s=await get(r); if(!s.exists()) await set(r,v); }
+
+  const walletSnap=await get(walletRef);
+  if(!walletSnap.exists()){
+    const oldSnap=await get(legacyMoneyRef);
+    const legacy=moneyRound(oldSnap.val()?.balance||0);
+    await set(walletRef,{...DEFAULT_WALLET,unallocated:legacy,lifetimeEarned:legacy});
+    if(legacy>0){
+      const tr=push(transactionsRef);
+      await set(tr,{type:"migration",amount:legacy,bucket:"unallocated",description:"Imported balance from original app",ts:Date.now()});
+    }
   }
+  const wishSnap=await get(wishlistRef);
+  if(!wishSnap.exists()) await set(wishlistRef,[]);
 }
+seedDefaults();
 
-let tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
-let chores = JSON.parse(JSON.stringify(DEFAULT_CHORES));
-let dayLog = { morning:{}, evening:{}, paidChores:{} };
-let streak = { current:0, longest:0, lastCompleteDate:null };
-let money = { balance:0 };
-let currentPeriod = "morning";
-
-/* ---------- Connection status ---------- */
-const connDot = document.getElementById("connDot");
-const connLabel = document.getElementById("connLabel");
-onValue(ref(db, ".info/connected"), (snap)=>{
-  const connected = snap.val() === true;
-  connDot.classList.toggle("live", connected);
-  connLabel.textContent = connected ? "live" : "offline";
+/* ---------- Live data ---------- */
+onValue(tasksRef,(snap)=>{ const v=snap.val(); if(v){tasks=v;renderTasks();renderEditLists();renderAllowanceStatus();} });
+onValue(choresRef,(snap)=>{ const v=snap.val(); chores=Array.isArray(v)?v.filter(Boolean):(v?Object.values(v):[]);renderChores();renderEditChores();renderPendingApprovals(); });
+onValue(xpReasonsRef,(snap)=>{ const v=snap.val(); xpReasons=Array.isArray(v)?v.filter(Boolean):(v?Object.values(v):[]);renderXpQuickButtons();renderEditXpReasons(); });
+onValue(dadMatchRef,(snap)=>{ dadMatch=snap.val()||{...DEFAULT_DAD_MATCH}; if(!Array.isArray(dadMatch.tiers)) dadMatch.tiers=Object.values(dadMatch.tiers||{}); renderXp();renderWishlist();renderMatchSettings();renderPurchasePreview(); });
+onValue(allowanceConfigRef,(snap)=>{ allowanceConfig={...DEFAULT_ALLOWANCE,...(snap.val()||{})};renderAllowanceSettings();renderAllowanceStatus(); });
+onValue(savingsConfigRef,(snap)=>{ savingsConfig={...DEFAULT_SAVINGS,...(snap.val()||{})};renderSavingsSettings();renderSavingsStatus(); });
+onValue(wishlistRef,(snap)=>{ const v=snap.val(); wishlist=Array.isArray(v)?v.filter(Boolean):(v?Object.values(v):[]);renderWishlist();renderEditWishlist();renderPurchaseWishlistOptions(); });
+onValue(streakRef,(snap)=>{ streak=snap.val()||{current:0,longest:0,lastCompleteDate:null};renderStreak(); });
+onValue(walletRef,(snap)=>{ wallet={...DEFAULT_WALLET,...(snap.val()||{})};renderWallet();renderWishlist();renderParentStats();renderPurchasePreview();renderSavingsStatus(); });
+onValue(xpRef,(snap)=>{ xp={...DEFAULT_XP,...(snap.val()||{})};renderXp();renderParentStats();renderPurchasePreview(); });
+onValue(xpHistoryRef,(snap)=>{ xpHistory=snap.val()||{};renderXpRecent(); });
+onValue(transactionsRef,(snap)=>{ transactions=snap.val()||{};renderTransactions(); });
+onValue(msgRef,(snap)=>{
+  const val=snap.val(); const banner=document.getElementById("msgBanner");
+  if(val&&val.text&&!val.dismissed){document.getElementById("msgText").textContent=val.text;banner.style.display="flex";}else banner.style.display="none";
 });
 
-/* ---------- Load / seed tasks + chores ---------- */
-const tasksRef = ref(db, "routineTracker/config/tasks");
-get(tasksRef).then(snap=>{ if(!snap.exists()) set(tasksRef, DEFAULT_TASKS); });
-onValue(tasksRef, (snap)=>{
-  const val = snap.val();
-  if(val){ tasks = val; renderTasks(); renderEditLists(); }
-});
-
-const choresRef = ref(db, "routineTracker/config/paidChores");
-get(choresRef).then(snap=>{ if(!snap.exists()) set(choresRef, DEFAULT_CHORES); });
-onValue(choresRef, (snap)=>{
-  const val = snap.val();
-  chores = Array.isArray(val) ? val.filter(Boolean) : (val ? Object.values(val) : []);
-  renderChores();
-  renderEditChores();
-});
-
-/* ---------- Today's log (rebinds automatically when the date rolls over) ---------- */
-let boundDate = todayStr();
-let unbindTodayListener = null;
-
+/* ---------- Today's log ---------- */
 function bindTodayListener(){
-  if(unbindTodayListener){ unbindTodayListener(); }
-  boundDate = todayStr();
-  const dRef = ref(db, "routineTracker/days/" + boundDate);
-  unbindTodayListener = onValue(dRef, (snap)=>{
-    const val = snap.val() || {};
-    dayLog = { morning: val.morning || {}, evening: val.evening || {}, paidChores: val.paidChores || {} };
-    renderTasks();
-    renderChores();
-    renderTodaysActivity();
-    renderPendingApprovals();
-    checkCelebration();
+  if(unbindTodayListener) unbindTodayListener();
+  boundDate=todayStr();
+  const dRef=ref(db,ROOT+"/days/"+boundDate);
+  unbindTodayListener=onValue(dRef,(snap)=>{
+    const val=snap.val()||{};
+    dayLog={morning:val.morning||{},evening:val.evening||{},paidChores:val.paidChores||{}};
+    renderTasks();renderChores();renderTodaysActivity();renderPendingApprovals();checkCelebration();renderAllowanceStatus();
   });
 }
-function ensureBoundToToday(){
-  if(todayStr() !== boundDate){
-    bindTodayListener();
-  }
-}
+function ensureBoundToToday(){ if(todayStr()!==boundDate) bindTodayListener(); }
 bindTodayListener();
+setInterval(ensureBoundToToday,30000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")ensureBoundToToday();});
+window.addEventListener("focus",ensureBoundToToday);
 
-// Catch the midnight rollover even if the tablet is just sitting open and idle
-setInterval(ensureBoundToToday, 30000);
-document.addEventListener("visibilitychange", ()=>{
-  if(document.visibilityState === "visible") ensureBoundToToday();
-});
-window.addEventListener("focus", ensureBoundToToday);
-
-/* ---------- Streak ---------- */
-const streakRef = ref(db, "routineTracker/streak");
-onValue(streakRef, (snap)=>{
-  streak = snap.val() || { current:0, longest:0, lastCompleteDate:null };
-  renderStreak();
-});
-
-/* ---------- Money ---------- */
-const moneyRef = ref(db, "routineTracker/money");
-onValue(moneyRef, (snap)=>{
-  money = snap.val() || { balance:0 };
-  renderMoney();
-});
-
-function periodComplete(period){
-  const list = tasks[period] || [];
-  if(list.length === 0) return false;
-  return list.every(t => dayLog[period] && dayLog[period][t.id]);
+/* ---------- Core completion / streak ---------- */
+function periodComplete(period,log=dayLog){
+  const list=tasks[period]||[]; if(list.length===0)return false;
+  return list.every(t=>log[period]&&log[period][t.id]);
 }
-function todayFullyDone(){
-  return periodComplete("morning") && periodComplete("evening");
+function todayFullyDone(){ return periodComplete("morning")&&periodComplete("evening"); }
+async function recomputeStreak(){
+  const today=todayStr(),yesterday=dateStrOffset(-1),bothDone=todayFullyDone();
+  const snap=await get(streakRef);
+  let s=snap.val()||{current:0,longest:0,lastCompleteDate:null};
+  if(s.lastCompleteDate&&s.lastCompleteDate!==today&&s.lastCompleteDate!==yesterday)s.current=0;
+  if(bothDone&&s.lastCompleteDate!==today){
+    s.current=(s.lastCompleteDate===yesterday)?(s.current||0)+1:1;
+    s.lastCompleteDate=today;
+    s.longest=Math.max(s.longest||0,s.current);
+    await set(streakRef,s);
+    showToast("🔥 Full day complete — streak updated!");
+  }else await set(streakRef,s);
 }
-
-/* ---------- Streak + money engine ---------- */
-function recomputeStreak(){
-  const today = todayStr();
-  const yesterday = dateStrOffset(-1);
-  const bothDone = todayFullyDone();
-
-  get(streakRef).then(snap=>{
-    let s = snap.val() || { current:0, longest:0, lastCompleteDate:null };
-
-    // A fully skipped day breaks the streak (money already earned is untouched)
-    if(s.lastCompleteDate && s.lastCompleteDate !== today && s.lastCompleteDate !== yesterday){
-      s.current = 0;
-    }
-
-    if(bothDone && s.lastCompleteDate !== today){
-      const newCurrent = (s.lastCompleteDate === yesterday) ? s.current + 1 : 1;
-      s.current = newCurrent;
-      s.lastCompleteDate = today;
-      s.longest = Math.max(s.longest || 0, s.current);
-      set(streakRef, s);
-
-      let earned = 0;
-      if(newCurrent % 3 === 0) earned += 1;
-      if(newCurrent % 10 === 0) earned += 5;
-      if(earned > 0){
-        runTransaction(moneyRef, (current)=>{
-          let m = current || { balance:0 };
-          m.balance = (m.balance || 0) + earned;
-          return m;
-        }).then(()=>{
-          showToast("🎉 Streak bonus! +" + formatMoney(earned) + " added!");
-        });
-      }
-    } else {
-      set(streakRef, s);
-    }
-  });
+async function maybeClawbackToday(){
+  const today=todayStr(),yesterday=dateStrOffset(-1);
+  const snap=await get(streakRef); let s=snap.val()||{current:0,longest:0,lastCompleteDate:null};
+  if(s.lastCompleteDate===today&&!todayFullyDone()){
+    const oldCurrent=s.current||0,newCurrent=Math.max(0,oldCurrent-1);
+    await set(streakRef,{current:newCurrent,longest:(s.longest===oldCurrent?newCurrent:s.longest),lastCompleteDate:newCurrent>0?yesterday:null});
+    showToast("↩️ Today's streak credit corrected");
+  }
 }
-
 function renderStreak(){
-  document.getElementById("streakCount").textContent = (streak.current || 0) + " day streak";
-  document.getElementById("streakBest").textContent = "Best: " + (streak.longest || 0);
-  document.getElementById("statCurrent").textContent = streak.current || 0;
-  document.getElementById("statBest").textContent = streak.longest || 0;
-  const flame = document.getElementById("flameIcon");
-  flame.classList.toggle("big", (streak.current || 0) >= 3);
-  flame.textContent = (streak.current || 0) >= 1 ? "🔥" : "🕯️";
+  document.getElementById("streakCount").textContent=(streak.current||0)+" day streak";
+  document.getElementById("streakBest").textContent="Best: "+(streak.longest||0);
+  document.getElementById("statCurrent").textContent=streak.current||0;
+  const flame=document.getElementById("flameIcon"); flame.classList.toggle("big",(streak.current||0)>=3); flame.textContent=(streak.current||0)>=1?"🔥":"🕯️";
 }
 
-function renderMoney(){
-  document.getElementById("moneyChipText").textContent = formatMoney(money.balance) + " saved up";
-  document.getElementById("statOwe").textContent = formatMoney(money.balance);
+/* ---------- Wallet + transaction ledger ---------- */
+function walletTotal(){ return moneyRound((wallet.spend||0)+(wallet.save||0)+(wallet.give||0)+(wallet.unallocated||0)); }
+function renderWallet(){
+  document.getElementById("walletSpend").textContent=formatMoney(wallet.spend);
+  document.getElementById("walletSave").textContent=formatMoney(wallet.save);
+  document.getElementById("walletGive").textContent=formatMoney(wallet.give);
+  document.getElementById("walletTotal").textContent="Total "+formatMoney(walletTotal());
+  const ready=document.getElementById("readyMoney");
+  const amt=moneyRound(wallet.unallocated||0);
+  ready.classList.toggle("show",amt>0.001);
+  document.getElementById("readyMoneyText").textContent=formatMoney(amt)+" ready to sort";
 }
-
-/* ---------- Correcting false or accidental completions ---------- */
-function maybeClawbackToday(){
-  const today = todayStr();
-  const yesterday = dateStrOffset(-1);
-  get(streakRef).then(snap=>{
-    let s = snap.val() || { current:0, longest:0, lastCompleteDate:null };
-    if(s.lastCompleteDate === today && !todayFullyDone()){
-      const oldCurrent = s.current;
-      const newCurrent = Math.max(0, oldCurrent - 1);
-      const newLast = newCurrent > 0 ? yesterday : null;
-      const newLongest = (s.longest === oldCurrent) ? newCurrent : s.longest;
-      set(streakRef, { current:newCurrent, longest:newLongest, lastCompleteDate:newLast });
-
-      let clawback = 0;
-      if(oldCurrent % 3 === 0) clawback += 1;
-      if(oldCurrent % 10 === 0) clawback += 5;
-      if(clawback > 0){
-        runTransaction(moneyRef, (current)=>{
-          let m = current || { balance:0 };
-          m.balance = Math.max(0, (m.balance || 0) - clawback);
-          return m;
-        }).then(()=>{
-          showToast("↩️ Corrected: -" + formatMoney(clawback) + " undone");
-        });
-      } else {
-        showToast("↩️ Today's streak credit undone");
-      }
+async function addTransaction(entry){
+  const tr=push(transactionsRef);
+  await set(tr,{...entry,ts:entry.ts||Date.now()});
+  return tr.key;
+}
+async function creditWallet(bucket,amount,description,type="credit",meta={}){
+  amount=moneyRound(amount); if(amount<=0)return;
+  await runTransaction(walletRef,(current)=>{
+    const w={...DEFAULT_WALLET,...(current||{})};
+    w[bucket]=moneyRound((w[bucket]||0)+amount);
+    w.lifetimeEarned=moneyRound((w.lifetimeEarned||0)+amount);
+    return w;
+  });
+  return addTransaction({type,amount,bucket,description,meta});
+}
+async function adjustWallet(bucket,amount,description,type="adjustment",countAsEarned=false){
+  amount=moneyRound(amount); if(!amount)return;
+  const result=await runTransaction(walletRef,(current)=>{
+    const w={...DEFAULT_WALLET,...(current||{})};
+    if((w[bucket]||0)+amount<-0.001)return;
+    w[bucket]=moneyRound((w[bucket]||0)+amount);
+    if(countAsEarned&&amount>0)w.lifetimeEarned=moneyRound((w.lifetimeEarned||0)+amount);
+    return w;
+  });
+  if(!result.committed) throw new Error("Not enough money in that bucket.");
+  return addTransaction({type,amount,bucket,description});
+}
+async function removeMoneyForCorrection(amount,description){
+  amount=moneyRound(amount);
+  await runTransaction(walletRef,(current)=>{
+    const w={...DEFAULT_WALLET,...(current||{})}; let remaining=amount;
+    for(const bucket of ["unallocated","spend","save","give"]){
+      const take=Math.min(remaining,Number(w[bucket]||0));
+      w[bucket]=moneyRound((w[bucket]||0)-take); remaining=moneyRound(remaining-take);
+      if(remaining<=0)break;
     }
+    w.lifetimeEarned=Math.max(0,moneyRound((w.lifetimeEarned||0)-amount+remaining));
+    return w;
   });
+  await addTransaction({type:"correction",amount:-amount,bucket:"mixed",description});
 }
 
-function clearRoutineItem(period, taskId){
-  const today = todayStr();
-  if(!dayLog[period]) dayLog[period] = {};
-  dayLog[period][taskId] = false;
-  update(ref(db, "routineTracker/days/" + today + "/" + period), { [taskId]: false }).then(()=>{
-    maybeClawbackToday();
-    renderTasks();
-    renderChores();
-    renderTodaysActivity();
+/* child allocation */
+const allocateOverlay=document.getElementById("allocateOverlay");
+document.getElementById("openAllocateBtn").addEventListener("click",()=>{
+  document.getElementById("allocSpend").value="0";document.getElementById("allocSave").value="0";document.getElementById("allocGive").value="0";
+  document.getElementById("allocateAvailable").textContent="You have "+formatMoney(wallet.unallocated)+" ready to sort.";
+  document.getElementById("allocateError").style.display="none";
+  allocateOverlay.classList.add("show");
+});
+document.getElementById("allocateCancel").addEventListener("click",()=>allocateOverlay.classList.remove("show"));
+document.getElementById("allocateSaveBtn").addEventListener("click",async()=>{
+  const spend=moneyRound(Math.max(0,Number(document.getElementById("allocSpend").value)||0));
+  const save=moneyRound(Math.max(0,Number(document.getElementById("allocSave").value)||0));
+  const give=moneyRound(Math.max(0,Number(document.getElementById("allocGive").value)||0));
+  const total=moneyRound(spend+save+give),err=document.getElementById("allocateError");
+  if(total<=0){err.textContent="Choose where at least some of the money should go.";err.style.display="block";return;}
+  const result=await runTransaction(walletRef,(current)=>{
+    const w={...DEFAULT_WALLET,...(current||{})};
+    if(total>(w.unallocated||0)+.001)return;
+    w.unallocated=moneyRound((w.unallocated||0)-total);w.spend=moneyRound((w.spend||0)+spend);w.save=moneyRound((w.save||0)+save);w.give=moneyRound((w.give||0)+give);return w;
   });
+  if(!result.committed){err.textContent="That is more than the amount ready to sort.";err.style.display="block";return;}
+  await addTransaction({type:"allocation",amount:0,bucket:"multiple",description:"Sorted earned money",meta:{spend,save,give}});
+  allocateOverlay.classList.remove("show");showToast("💰 Money sorted — nice choice!");
+});
+
+/* ---------- XP + Dad Match ---------- */
+function sortedMatchTiers(){ return (dadMatch.tiers||[]).map(t=>({...t,maxMatch:Number(t.maxMatch)||0,xpCost:Number(t.xpCost)||0})).filter(t=>t.maxMatch>0&&t.xpCost>0).sort((a,b)=>a.maxMatch-b.maxMatch); }
+function xpCostForMatch(amount){
+  amount=Math.max(0,Number(amount)||0); if(amount<=0)return 0;
+  const tiers=sortedMatchTiers(); if(!tiers.length)return Infinity;
+  const found=tiers.find(t=>amount<=t.maxMatch+.001); if(found)return found.xpCost;
+  const high=tiers[tiers.length-1],rate=Math.max(1,Number(dadMatch.xpPerDollarAboveHighest)||10);
+  return Math.ceil(high.xpCost+Math.ceil(amount-high.maxMatch)*rate);
 }
-
-function unapproveChore(choreId, amount){
-  runTransaction(moneyRef, (current)=>{
-    let m = current || { balance:0 };
-    m.balance = Math.max(0, (m.balance || 0) - amount);
-    return m;
-  }).then(()=>{
-    update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), { [choreId]: null }).then(()=>{
-      renderTodaysActivity();
-      showToast("↩️ Undone: -" + formatMoney(amount));
-    });
-  });
+function maxMatchForXp(xpAmount){
+  xpAmount=Math.max(0,Number(xpAmount)||0); const tiers=sortedMatchTiers(); if(!tiers.length)return 0;
+  let best=0; for(const t of tiers){if(xpAmount>=t.xpCost)best=t.maxMatch;else break;}
+  const high=tiers[tiers.length-1],rate=Math.max(1,Number(dadMatch.xpPerDollarAboveHighest)||10);
+  if(xpAmount>high.xpCost)best=high.maxMatch+Math.floor((xpAmount-high.xpCost)/rate);
+  return moneyRound(best);
 }
-
-function clearEverythingToday(){
-  const ok = window.confirm("Clear every checked item for today? This also undoes any streak or chore money earned today.");
-  if(!ok) return;
-  const today = todayStr();
-  const choreRefundTotal = chores
-    .filter(c => dayLog.paidChores && dayLog.paidChores[c.id] && dayLog.paidChores[c.id].status === "approved")
-    .reduce((sum, c) => sum + Number((dayLog.paidChores[c.id].amount != null ? dayLog.paidChores[c.id].amount : c.amount) || 0), 0);
-
-  dayLog = { morning:{}, evening:{}, paidChores:{} };
-  set(ref(db, "routineTracker/days/" + today), {}).then(()=>{
-    renderTasks();
-    renderChores();
-    renderTodaysActivity();
-    maybeClawbackToday();
-    if(choreRefundTotal > 0){
-      runTransaction(moneyRef, (current)=>{
-        let m = current || { balance:0 };
-        m.balance = Math.max(0, (m.balance || 0) - choreRefundTotal);
-        return m;
-      });
-    }
-  });
-}
-document.getElementById("clearTodayBtn").addEventListener("click", clearEverythingToday);
-
-function renderTodaysActivity(){
-  const container = document.getElementById("todaysActivity");
-  container.innerHTML = "";
-  let anyItems = false;
-
-  ["morning","evening"].forEach(period=>{
-    (tasks[period] || []).forEach(t=>{
-      if(dayLog[period] && dayLog[period][t.id]){
-        anyItems = true;
-        const row = document.createElement("div");
-        row.className = "activity-row";
-        row.innerHTML =
-          '<div class="activity-emoji">' + t.emoji + '</div>' +
-          '<div class="activity-label">' + t.label + '</div>' +
-          '<div class="activity-tag">' + (period === "morning" ? "AM" : "PM") + '</div>' +
-          '<button class="activity-undo">Undo</button>';
-        row.querySelector(".activity-undo").addEventListener("click", ()=> clearRoutineItem(period, t.id));
-        container.appendChild(row);
-      }
-    });
-  });
-
-  chores.forEach(c=>{
-    const entry = dayLog.paidChores && dayLog.paidChores[c.id];
-    if(entry && entry.status === "approved"){
-      anyItems = true;
-      const amt = entry.amount != null ? entry.amount : c.amount;
-      const row = document.createElement("div");
-      row.className = "activity-row";
-      row.innerHTML =
-        '<div class="activity-emoji">' + c.emoji + '</div>' +
-        '<div class="activity-label">' + c.label + '</div>' +
-        '<div class="activity-tag">' + formatMoney(amt) + '</div>' +
-        '<button class="activity-undo">Undo</button>';
-      row.querySelector(".activity-undo").addEventListener("click", ()=> unapproveChore(c.id, amt));
-      container.appendChild(row);
-    }
-  });
-
-  if(!anyItems){
-    container.innerHTML = '<div class="activity-empty">Nothing checked off yet today.</div>';
+function renderXp(){
+  const available=Number(xp.available)||0,lifetime=Number(xp.lifetime)||0,tiers=sortedMatchTiers();
+  document.getElementById("xpValue").textContent=available+" XP";
+  document.getElementById("statXp").textContent=available;
+  document.getElementById("statLifetimeXp").textContent=lifetime;
+  document.getElementById("xpMatch").innerHTML="Dad Match<br>"+formatMoney(maxMatchForXp(available));
+  const next=tiers.find(t=>available<t.xpCost);
+  const bar=document.getElementById("xpProgress");
+  if(next){
+    const prev=[...tiers].reverse().find(t=>t.xpCost<=available);
+    const start=prev?prev.xpCost:0;
+    const pct=clamp(((available-start)/(next.xpCost-start))*100,0,100);
+    bar.style.width=pct+"%";
+    document.getElementById("xpNext").textContent=(next.xpCost-available)+" XP until a "+formatMoney(next.maxMatch)+" Dad Match tier";
+  }else{
+    bar.style.width="100%";
+    document.getElementById("xpNext").textContent="Big-goal mode: higher Dad Matches keep scaling with XP.";
   }
 }
+async function awardXp(amount,reason,emoji="⭐"){
+  amount=Math.max(1,Math.round(Number(amount)||0));
+  await runTransaction(xpRef,(current)=>{const x={...DEFAULT_XP,...(current||{})};x.available=(x.available||0)+amount;x.lifetime=(x.lifetime||0)+amount;return x;});
+  const h=push(xpHistoryRef); await set(h,{amount,reason,emoji,type:"award",ts:Date.now()});
+  showToast(emoji+" +"+amount+" XP — "+reason);
+}
+async function spendXp(amount,reason){
+  amount=Math.max(0,Math.round(Number(amount)||0)); if(!amount)return true;
+  const result=await runTransaction(xpRef,(current)=>{const x={...DEFAULT_XP,...(current||{})};if((x.available||0)<amount)return;x.available=(x.available||0)-amount;return x;});
+  if(!result.committed)return false;
+  const h=push(xpHistoryRef); await set(h,{amount:-amount,reason,emoji:"🤝",type:"dadMatch",ts:Date.now()}); return true;
+}
+async function undoXpAward(id,entry){
+  if(!entry||entry.type!=="award"||entry.amount<=0)return;
+  if(!window.confirm("Correct this XP award?"))return;
+  await runTransaction(xpRef,(current)=>{const x={...DEFAULT_XP,...(current||{})};x.available=Math.max(0,(x.available||0)-entry.amount);x.lifetime=Math.max(0,(x.lifetime||0)-entry.amount);return x;});
+  await remove(ref(db,ROOT+"/xpHistory/"+id)); showToast("↩️ XP award corrected");
+}
+function renderXpQuickButtons(){
+  const c=document.getElementById("xpQuickButtons");c.innerHTML="";
+  xpReasons.forEach(r=>{const b=document.createElement("button");b.className="xp-award-btn";b.innerHTML=escapeHtml(r.emoji)+" "+escapeHtml(r.label)+"<span>+"+Number(r.amount||0)+" XP</span>";b.addEventListener("click",()=>awardXp(r.amount,r.label,r.emoji));c.appendChild(b);});
+  if(!xpReasons.length)c.innerHTML='<div class="activity-empty">Add XP reasons below.</div>';
+}
+function renderXpRecent(){
+  const c=document.getElementById("xpRecent");c.innerHTML="";
+  const items=Object.entries(xpHistory).map(([id,v])=>({id,...v})).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,8);
+  if(!items.length){c.innerHTML='<div class="activity-empty">No XP activity yet.</div>';return;}
+  items.forEach(e=>{const row=document.createElement("div");row.className="activity-row";row.innerHTML='<div class="activity-emoji">'+escapeHtml(e.emoji||"⭐")+'</div><div class="activity-label">'+escapeHtml(e.reason||"XP")+'<small>'+nowLabel(e.ts)+'</small></div><div class="activity-tag">'+(e.amount>0?"+":"")+e.amount+' XP</div>'+(e.type==="award"?'<button class="activity-undo">Correct</button>':'');if(e.type==="award")row.querySelector(".activity-undo").addEventListener("click",()=>undoXpAward(e.id,e));c.appendChild(row);});
+}
+document.getElementById("customXpBtn").addEventListener("click",()=>{const a=Number(document.getElementById("customXpAmount").value),r=document.getElementById("customXpReason").value.trim();if(a>0&&r){awardXp(a,r,"⭐");document.getElementById("customXpAmount").value="";document.getElementById("customXpReason").value="";}});
 
-/* ---------- Render routine tasks ---------- */
+/* ---------- Wishlist ---------- */
+function renderWishlist(){
+  const c=document.getElementById("wishList");c.innerHTML="";
+  if(!wishlist.length){c.innerHTML='<div class="activity-empty">Nothing on the wish list yet. Add a goal from the Parent Dashboard.</div>';return;}
+  wishlist.forEach(w=>{
+    const price=Math.max(0,Number(w.price)||0),spend=Number(wallet.spend)||0;
+    const pct=price>0?clamp((spend/price)*100,0,100):0;
+    let note="You have "+formatMoney(spend)+" in Spend."; let cls="wish-note";
+    if(spend>=price&&price>0){note="You can afford this from Spend right now.";cls+=" ready";}
+    else if(price>0){
+      const needed=moneyRound(price-spend);
+      if(needed<=spend+.001){const cost=xpCostForMatch(needed);if(cost<=Number(xp.available||0)){note="Dad Match ready: "+formatMoney(needed)+" match for "+cost+" XP.";cls+=" ready";}else if(Number.isFinite(cost)){note=(cost-(xp.available||0))+" more XP could unlock the match you need.";}}
+    }
+    const row=document.createElement("div");row.className="wish-row";row.innerHTML='<div class="wish-head"><div class="wish-emoji">'+escapeHtml(w.emoji||"🎁")+'</div><div class="wish-name">'+escapeHtml(w.label)+'</div><div class="wish-price">'+formatMoney(price)+'</div></div><div class="wish-progress"><div style="width:'+pct+'%"></div></div><div class="'+cls+'">'+escapeHtml(note)+'</div>';c.appendChild(row);
+  });
+}
+
+/* ---------- Routine tasks ---------- */
 function renderTasks(){
-  const list = tasks[currentPeriod] || [];
-  const container = document.getElementById("taskList");
-  container.innerHTML = "";
-  if(list.length === 0){
-    container.innerHTML = '<div class="empty-tasks">No tasks yet — add some from the parent dashboard.</div>';
-  }
-  list.forEach(t=>{
-    const done = !!(dayLog[currentPeriod] && dayLog[currentPeriod][t.id]);
-    const row = document.createElement("div");
-    row.className = "task-row" + (done ? " done" : "");
-    row.innerHTML =
-      '<div class="task-emoji">' + t.emoji + '</div>' +
-      '<div class="task-label">' + t.label + '</div>' +
-      '<div class="task-check">' + (done ? "✓" : "") + '</div>';
-    row.addEventListener("click", ()=> toggleTask(t.id));
-    container.appendChild(row);
-  });
+  const list=tasks[currentPeriod]||[],c=document.getElementById("taskList");c.innerHTML="";
+  if(!list.length)c.innerHTML='<div class="empty-tasks">No responsibilities yet — add some from the parent dashboard.</div>';
+  list.forEach(t=>{const done=!!(dayLog[currentPeriod]&&dayLog[currentPeriod][t.id]);const row=document.createElement("div");row.className="task-row"+(done?" done":"");row.innerHTML='<div class="task-emoji">'+escapeHtml(t.emoji)+'</div><div class="task-label">'+escapeHtml(t.label)+'</div><div class="task-check">'+(done?"✓":"")+'</div>';row.addEventListener("click",()=>toggleTask(t.id));c.appendChild(row);});
   checkCelebration();
 }
-
-function toggleTask(taskId){
+async function toggleTask(taskId){
   ensureBoundToToday();
-  const current = !!(dayLog[currentPeriod] && dayLog[currentPeriod][taskId]);
-  update(ref(db, "routineTracker/days/" + todayStr() + "/" + currentPeriod), { [taskId]: !current })
-    .then(()=> recomputeStreak());
+  const current=!!(dayLog[currentPeriod]&&dayLog[currentPeriod][taskId]);
+  if(!dayLog[currentPeriod]) dayLog[currentPeriod]={};
+  dayLog[currentPeriod][taskId]=!current; // keep local state in sync before streak calculation
+  await update(ref(db,ROOT+"/days/"+todayStr()+"/"+currentPeriod),{[taskId]:!current});
+  if(current)await maybeClawbackToday();else await recomputeStreak();
+}
+function checkCelebration(){
+  const wrap=document.getElementById("celebrateWrap"),complete=periodComplete(currentPeriod);wrap.style.display=complete?"block":"none";
+  document.getElementById("celebrateText").textContent=currentPeriod==="morning"?"Morning responsibilities complete! Great start!":"Evening responsibilities complete! Sweet dreams!";
+  if(complete&&!wrap.dataset.celebrated){wrap.dataset.celebrated="1";burstConfetti();}if(!complete)wrap.dataset.celebrated="";
 }
 
-/* ---------- Render paid chores ---------- */
+/* ---------- Optional jobs + photo approvals ---------- */
 function renderChores(){
-  const unlocked = periodComplete("morning");
-  document.getElementById("lockBanner").style.display = unlocked ? "none" : "flex";
-  const container = document.getElementById("choreList");
-  container.innerHTML = "";
-  if(chores.length === 0){
-    container.innerHTML = '<div class="empty-tasks">No paid chores set up yet.</div>';
-    return;
-  }
-  chores.forEach(c=>{
-    const entry = dayLog.paidChores && dayLog.paidChores[c.id];
-    const status = entry && entry.status;
-    const row = document.createElement("div");
-
-    if(status === "approved"){
-      row.className = "task-row done";
-      row.innerHTML =
-        '<div class="task-emoji">' + c.emoji + '</div>' +
-        '<div class="task-label">' + c.label + '</div>' +
-        '<div class="task-amount">' + formatMoney(c.amount) + '</div>' +
-        '<div class="task-check">✓</div>';
-    } else if(status === "pending"){
-      row.className = "task-row pending";
-      row.innerHTML =
-        '<div class="task-emoji">' + c.emoji + '</div>' +
-        '<div class="task-label">' + c.label + '</div>' +
-        '<div class="pending-tag">⏳ Waiting</div>';
-    } else {
-      row.className = "task-row" + (unlocked ? "" : " locked");
-      row.innerHTML =
-        '<div class="task-emoji">' + c.emoji + '</div>' +
-        '<div class="task-label">' + c.label + '</div>' +
-        '<div class="task-amount">' + formatMoney(c.amount) + '</div>' +
-        '<div class="task-check"></div>';
-      if(unlocked){
-        row.addEventListener("click", ()=> requestChorePhoto(c.id, c.amount));
-      }
-    }
-    container.appendChild(row);
+  const c=document.getElementById("choreList");c.innerHTML="";
+  if(!chores.length){c.innerHTML='<div class="empty-tasks">No optional jobs set up yet.</div>';return;}
+  chores.forEach(job=>{
+    const entry=dayLog.paidChores&&dayLog.paidChores[job.id],status=entry&&entry.status,row=document.createElement("div");
+    if(status==="approved"){row.className="task-row done";row.innerHTML='<div class="task-emoji">'+escapeHtml(job.emoji)+'</div><div class="task-label">'+escapeHtml(job.label)+'</div><div class="task-amount">'+formatMoney(entry.amount??job.amount)+'</div><div class="task-check">✓</div>';}
+    else if(status==="pending"){row.className="task-row pending";row.innerHTML='<div class="task-emoji">'+escapeHtml(job.emoji)+'</div><div class="task-label">'+escapeHtml(job.label)+'</div><div class="pending-tag">⏳ Waiting</div>';}
+    else{row.className="task-row";row.innerHTML='<div class="task-emoji">'+escapeHtml(job.emoji)+'</div><div class="task-label">'+escapeHtml(job.label)+'</div><div class="task-amount">'+formatMoney(job.amount)+'</div><div class="task-check"></div>';row.addEventListener("click",()=>requestChorePhoto(job.id,job.amount));}
+    c.appendChild(row);
   });
 }
-
-/* ---------- Photo capture + compression for chore submissions ---------- */
-let capturingChoreId = null;
-let capturingChoreAmount = 0;
-
-function requestChorePhoto(choreId, amount){
-  ensureBoundToToday();
-  capturingChoreId = choreId;
-  capturingChoreAmount = amount;
-  const input = document.getElementById("chorePhotoInput");
-  input.value = "";
-  input.click();
+let capturingChoreId=null,capturingChoreAmount=0;
+function requestChorePhoto(choreId,amount){ensureBoundToToday();capturingChoreId=choreId;capturingChoreAmount=amount;const input=document.getElementById("chorePhotoInput");input.value="";input.click();}
+function compressImageFile(file,maxDim,quality){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(new Error("Could not read photo"));reader.onload=()=>{const img=new Image();img.onerror=()=>reject(new Error("Could not load photo"));img.onload=()=>{let w=img.width,h=img.height;if(w>h&&w>maxDim){h=Math.round(h*(maxDim/w));w=maxDim;}else if(h>maxDim){w=Math.round(w*(maxDim/h));h=maxDim;}const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;canvas.getContext("2d").drawImage(img,0,0,w,h);resolve(canvas.toDataURL("image/jpeg",quality));};img.src=reader.result;};reader.readAsDataURL(file);});}
+document.getElementById("chorePhotoInput").addEventListener("change",(e)=>{const file=e.target.files&&e.target.files[0];if(!file||!capturingChoreId)return;const choreId=capturingChoreId,amount=capturingChoreAmount;showToast("📸 Sending photo…");compressImageFile(file,800,.6).then(dataUrl=>update(ref(db,ROOT+"/days/"+todayStr()+"/paidChores"),{[choreId]:{status:"pending",photo:dataUrl,amount,ts:Date.now()}})).then(()=>showToast("✅ Sent to Dad for approval!")).catch(()=>showToast("⚠️ Couldn't process that photo, try again"));capturingChoreId=null;});
+function renderPendingApprovals(){
+  const c=document.getElementById("pendingApprovals");c.innerHTML="";
+  const pending=chores.map(job=>({job,entry:dayLog.paidChores&&dayLog.paidChores[job.id]})).filter(x=>x.entry&&x.entry.status==="pending");
+  if(!pending.length){c.innerHTML='<div class="activity-empty">Nothing waiting on you right now.</div>';return;}
+  pending.forEach(({job,entry})=>{const card=document.createElement("div");card.className="approval-card";card.innerHTML='<img class="approval-thumb" src="'+entry.photo+'" alt="job photo"><div class="approval-info"><div class="name">'+escapeHtml(job.emoji)+' '+escapeHtml(job.label)+'</div><div class="amt">'+formatMoney(entry.amount)+'</div></div><div class="approval-btns"><button class="approve-btn">✅ Approve</button><button class="reject-btn">❌ Reject</button></div>';card.querySelector(".approve-btn").addEventListener("click",()=>approveChore(job.id));card.querySelector(".reject-btn").addEventListener("click",()=>rejectChore(job.id));c.appendChild(card);});
+}
+async function approveChore(choreId){
+  const entry=dayLog.paidChores&&dayLog.paidChores[choreId];if(!entry||entry.status!=="pending")return;
+  const job=chores.find(c=>c.id===choreId),amount=moneyRound(entry.amount||0);
+  const txId=await creditWallet("unallocated",amount,job?job.label:"Optional job","job");
+  await update(ref(db,ROOT+"/days/"+todayStr()+"/paidChores"),{[choreId]:{status:"approved",amount,ts:Date.now(),txId}});
+  showToast("✅ Approved! "+formatMoney(amount)+" ready to sort.");
+}
+function rejectChore(choreId){update(ref(db,ROOT+"/days/"+todayStr()+"/paidChores"),{[choreId]:null}).then(()=>showToast("↩️ Sent back — he can try again"));}
+async function unapproveChore(choreId,amount){
+  if(!window.confirm("Correct this approved job and remove the earned money?"))return;
+  await removeMoneyForCorrection(amount,"Corrected approved job");
+  await update(ref(db,ROOT+"/days/"+todayStr()+"/paidChores"),{[choreId]:null});showToast("↩️ Job approval corrected");
 }
 
-function compressImageFile(file, maxDim, quality){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("Could not read photo"));
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = () => reject(new Error("Could not load photo"));
-      img.onload = () => {
-        let w = img.width, h = img.height;
-        if(w > h && w > maxDim){ h = Math.round(h * (maxDim / w)); w = maxDim; }
-        else if(h > maxDim){ w = Math.round(w * (maxDim / h)); h = maxDim; }
-        const canvas = document.createElement("canvas");
-        canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
+/* ---------- Weekly allowance ---------- */
+async function getWeekCompletion(){
+  const start=weekStartStr(),dates=dateRangeFrom(start,7),today=todayStr();
+  const relevant=dates.filter(d=>d<=today);let completeDays=0;
+  const results=await Promise.all(relevant.map(async d=>{const s=await get(ref(db,ROOT+"/days/"+d)),v=s.val()||{};const complete=periodComplete("morning",v)&&periodComplete("evening",v);if(complete)completeDays++;return {d,complete};}));
+  return {start,dates,relevant,completeDays,requiredDays:Number(allowanceConfig.requiredDays)||5,results};
 }
+async function renderAllowanceStatus(){
+  const box=document.getElementById("allowanceStatus"); if(!box)return;
+  const info=await getWeekCompletion(); const paidSnap=await get(ref(db,ROOT+"/allowancePayments/"+info.start)); const paid=paidSnap.val();
+  const eligible=info.completeDays>=info.requiredDays;
+  box.className="status-box "+(paid?"good":eligible?"good":"warn");
+  if(paid)box.textContent="Paid this week: "+formatMoney(paid.amount)+" on "+nowLabel(paid.ts)+".";
+  else box.textContent=info.completeDays+" complete day"+(info.completeDays===1?"":"s")+" this week. "+info.requiredDays+" required for "+formatMoney(allowanceConfig.weeklyAmount)+" allowance."+(eligible?" Eligible now!":" Keep going.");
+  document.getElementById("payAllowanceBtn").disabled=!!paid||!eligible;
+  document.getElementById("overrideAllowanceBtn").disabled=!!paid;
+}
+async function payAllowance(override=false){
+  const info=await getWeekCompletion(); const payRef=ref(db,ROOT+"/allowancePayments/"+info.start); const existing=await get(payRef); if(existing.exists()){showToast("Allowance already paid for this week.");return;}
+  if(!override&&info.completeDays<info.requiredDays){showToast("Not eligible yet.");return;}
+  if(override&&!window.confirm("Pay this week's allowance using a parent override?"))return;
+  const amount=moneyRound(allowanceConfig.weeklyAmount||0); if(amount<=0)return;
+  const txId=await creditWallet("unallocated",amount,"Weekly allowance","allowance",{weekStart:info.start,override});
+  await set(payRef,{amount,ts:Date.now(),override,completeDays:info.completeDays,txId});
+  showToast("💵 "+formatMoney(amount)+" allowance ready to sort!");renderAllowanceStatus();
+}
+document.getElementById("payAllowanceBtn").addEventListener("click",()=>payAllowance(false));
+document.getElementById("overrideAllowanceBtn").addEventListener("click",()=>payAllowance(true));
 
-document.getElementById("chorePhotoInput").addEventListener("change", (e)=>{
-  const file = e.target.files && e.target.files[0];
-  if(!file || !capturingChoreId) return;
-  const choreId = capturingChoreId;
-  const amount = capturingChoreAmount;
-  showToast("📸 Sending photo…");
-  compressImageFile(file, 800, 0.6).then(dataUrl=>{
-    ensureBoundToToday();
-    update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), {
-      [choreId]: { status:"pending", photo:dataUrl, amount:amount, ts:Date.now() }
-    }).then(()=>{
-      showToast("✅ Sent to Dad for approval!");
-    });
-  }).catch(()=>{
-    showToast("⚠️ Couldn't process that photo, try again");
-  });
-  capturingChoreId = null;
+/* ---------- Monthly savings match ---------- */
+async function renderSavingsStatus(){
+  const box=document.getElementById("savingsStatus");if(!box)return;
+  const snap=await get(ref(db,ROOT+"/savingsMonths/"+monthKey())); const done=snap.val();
+  if(done){box.className="status-box good";box.textContent="This month's savings match is done: "+formatMoney(done.childAmount)+" from Spend + "+formatMoney(done.parentAmount)+" from Dad.";document.getElementById("runSavingsBtn").disabled=true;}
+  else{box.className="status-box";box.textContent="This month: move "+formatMoney(savingsConfig.monthlyContribution)+" from Spend to Save, then Dad matches "+formatMoney(savingsConfig.monthlyContribution)+".";document.getElementById("runSavingsBtn").disabled=false;}
+}
+async function runSavingsMatch(){
+  const amount=moneyRound(savingsConfig.monthlyContribution||0);if(amount<=0)return;
+  if((wallet.spend||0)<amount-.001){showToast("He doesn't have enough in Spend for this month's contribution yet.");return;}
+  const mKey=monthKey(),mRef=ref(db,ROOT+"/savingsMonths/"+mKey),existing=await get(mRef);if(existing.exists()){showToast("Savings match already completed this month.");return;}
+  if(!window.confirm("Move "+formatMoney(amount)+" from Spend to Save and add Dad's "+formatMoney(amount)+" match?"))return;
+  const result=await runTransaction(walletRef,(current)=>{const w={...DEFAULT_WALLET,...(current||{})};if((w.spend||0)<amount)return;w.spend=moneyRound(w.spend-amount);w.save=moneyRound((w.save||0)+(amount*2));w.lifetimeEarned=moneyRound((w.lifetimeEarned||0)+amount);return w;});
+  if(!result.committed){showToast("Not enough Spend money.");return;}
+  await addTransaction({type:"savingsMatch",amount, bucket:"save",description:"Family savings contribution + Dad match",meta:{childMoved:amount,dadMatched:amount}});
+  await set(mRef,{childAmount:amount,parentAmount:amount,ts:Date.now()});showToast("🏦 Savings grew by "+formatMoney(amount*2)+"!");renderSavingsStatus();
+}
+document.getElementById("runSavingsBtn").addEventListener("click",runSavingsMatch);
+
+/* ---------- Purchase + Dad Match ---------- */
+function renderPurchaseWishlistOptions(){
+  const s=document.getElementById("purchaseWishSelect"),old=s.value;s.innerHTML='<option value="">Custom purchase…</option>';
+  wishlist.forEach(w=>{const o=document.createElement("option");o.value=w.id;o.textContent=(w.emoji||"🎁")+" "+w.label+" — "+formatMoney(w.price);s.appendChild(o);});
+  if([...s.options].some(o=>o.value===old))s.value=old;
+}
+document.getElementById("purchaseWishSelect").addEventListener("change",()=>{
+  const id=document.getElementById("purchaseWishSelect").value,w=wishlist.find(x=>x.id===id);
+  if(w){document.getElementById("purchaseDescription").value=w.label;document.getElementById("purchasePrice").value=Number(w.price||0).toFixed(2);document.getElementById("purchaseChild").value=Math.min(Number(wallet.spend||0),Number(w.price||0)).toFixed(2);}renderPurchasePreview();
+});
+document.getElementById("purchasePrice").addEventListener("input",renderPurchasePreview);
+document.getElementById("purchaseChild").addEventListener("input",renderPurchasePreview);
+function purchaseNumbers(){
+  const price=moneyRound(Number(document.getElementById("purchasePrice").value)||0),child=moneyRound(Number(document.getElementById("purchaseChild").value)||0),match=moneyRound(Math.max(0,price-child)),xpCost=xpCostForMatch(match);return {price,child,match,xpCost};
+}
+function renderPurchasePreview(){
+  const box=document.getElementById("purchaseMatchPreview"),n=purchaseNumbers();
+  if(n.price<=0){box.textContent="Dad Match and XP cost will appear here.";return;}
+  if(n.child<0||n.child>n.price){box.textContent="Enter how much of the price he will pay from Spend.";return;}
+  if(n.match>n.child+.001){box.textContent="A 1:1 Dad Match can cover up to the amount he contributes. He needs a larger contribution or more savings.";return;}
+  if(n.match<=.001){box.textContent="He is paying the full "+formatMoney(n.price)+" from Spend. No Dad Match or XP needed.";return;}
+  box.textContent="He pays "+formatMoney(n.child)+". Dad matches "+formatMoney(n.match)+". "+(dadMatch.consumeXp!==false?"XP cost: "+n.xpCost+".":"XP needed to unlock: "+n.xpCost+" (not spent).")+" Available XP: "+(xp.available||0)+".";
+}
+async function recordPurchase(){
+  const err=document.getElementById("purchaseError");err.style.display="none";
+  const desc=document.getElementById("purchaseDescription").value.trim(),wishId=document.getElementById("purchaseWishSelect").value,n=purchaseNumbers();
+  let msg="";
+  if(!desc)msg="Add a purchase description.";else if(n.price<=0)msg="Enter the item price.";else if(n.child<0||n.child>n.price)msg="His Spend contribution must be between $0 and the item price.";else if(n.child>(wallet.spend||0)+.001)msg="He doesn't have that much in Spend.";else if(n.match>n.child+.001)msg="Dad Match is dollar-for-dollar, so Dad's part can't be larger than his contribution.";else if(!Number.isFinite(n.xpCost))msg="Set up Dad Match tiers first.";else if(n.match>0&&n.xpCost>(xp.available||0))msg="He doesn't have enough available XP for that Dad Match yet.";
+  if(msg){err.textContent=msg;err.style.display="block";return;}
+  if(!window.confirm("Record "+desc+" for "+formatMoney(n.price)+"? He pays "+formatMoney(n.child)+" and Dad pays "+formatMoney(n.match)+"."))return;
+  const walletResult=await runTransaction(walletRef,(current)=>{const w={...DEFAULT_WALLET,...(current||{})};if((w.spend||0)<n.child)return;w.spend=moneyRound(w.spend-n.child);return w;});
+  if(!walletResult.committed){showToast("Spend balance changed — try again.");return;}
+  if(n.match>0&&dadMatch.consumeXp!==false){const ok=await spendXp(n.xpCost,"Dad Match: "+desc);if(!ok){await adjustWallet("spend",n.child,"Purchase rollback","rollback",false);showToast("XP changed — purchase was rolled back.");return;}}
+  await addTransaction({type:"purchase",amount:-n.child,bucket:"spend",description:desc,meta:{price:n.price,childPaid:n.child,dadMatched:n.match,xpCost:n.match>0?n.xpCost:0}});
+  if(wishId)await set(wishlistRef,wishlist.filter(w=>w.id!==wishId));
+  document.getElementById("purchaseWishSelect").value="";document.getElementById("purchaseDescription").value="";document.getElementById("purchasePrice").value="";document.getElementById("purchaseChild").value="";renderPurchasePreview();showToast("🛍️ Purchase recorded — he earned that choice.");
+}
+document.getElementById("recordPurchaseBtn").addEventListener("click",recordPurchase);
+
+/* ---------- Manual adjustment ---------- */
+document.getElementById("manualMoneyBtn").addEventListener("click",async()=>{
+  const bucket=document.getElementById("manualBucket").value,amount=moneyRound(Number(document.getElementById("manualAmount").value)||0),reason=document.getElementById("manualReason").value.trim()||"Manual adjustment";
+  if(!amount)return;
+  try{await adjustWallet(bucket,amount,reason,"manual",amount>0);document.getElementById("manualAmount").value="";document.getElementById("manualReason").value="";showToast("💰 Money updated.");}catch(e){showToast("⚠️ "+e.message);}
 });
 
-/* ---------- Parent approval / rejection ---------- */
-function renderPendingApprovals(){
-  const container = document.getElementById("pendingApprovals");
-  container.innerHTML = "";
-  const pending = chores
-    .map(c => ({ chore:c, entry: dayLog.paidChores && dayLog.paidChores[c.id] }))
-    .filter(x => x.entry && x.entry.status === "pending");
+/* ---------- Today's activity + corrections ---------- */
+async function clearRoutineItem(period,taskId){
+  if(!dayLog[period])dayLog[period]={};dayLog[period][taskId]=false;await update(ref(db,ROOT+"/days/"+todayStr()+"/"+period),{[taskId]:false});await maybeClawbackToday();renderTasks();renderTodaysActivity();
+}
+function renderTodaysActivity(){
+  const c=document.getElementById("todaysActivity");c.innerHTML="";let any=false;
+  ["morning","evening"].forEach(period=>(tasks[period]||[]).forEach(t=>{if(dayLog[period]&&dayLog[period][t.id]){any=true;const row=document.createElement("div");row.className="activity-row";row.innerHTML='<div class="activity-emoji">'+escapeHtml(t.emoji)+'</div><div class="activity-label">'+escapeHtml(t.label)+'</div><div class="activity-tag">'+(period==="morning"?"AM":"PM")+'</div><button class="activity-undo">Undo</button>';row.querySelector(".activity-undo").addEventListener("click",()=>clearRoutineItem(period,t.id));c.appendChild(row);}}));
+  chores.forEach(job=>{const entry=dayLog.paidChores&&dayLog.paidChores[job.id];if(entry&&entry.status==="approved"){any=true;const amt=entry.amount??job.amount,row=document.createElement("div");row.className="activity-row";row.innerHTML='<div class="activity-emoji">'+escapeHtml(job.emoji)+'</div><div class="activity-label">'+escapeHtml(job.label)+'</div><div class="activity-tag">'+formatMoney(amt)+'</div><button class="activity-undo">Correct</button>';row.querySelector(".activity-undo").addEventListener("click",()=>unapproveChore(job.id,amt));c.appendChild(row);}});
+  if(!any)c.innerHTML='<div class="activity-empty">Nothing checked off yet today.</div>';
+}
+async function clearEverythingToday(){
+  if(!window.confirm("Clear every routine item and job entry for today? Approved job money will be corrected too."))return;
+  const total=chores.filter(c=>dayLog.paidChores&&dayLog.paidChores[c.id]?.status==="approved").reduce((sum,c)=>sum+Number(dayLog.paidChores[c.id].amount??c.amount??0),0);
+  dayLog={morning:{},evening:{},paidChores:{}};
+  await set(ref(db,ROOT+"/days/"+todayStr()),{});
+  if(total>0)await removeMoneyForCorrection(total,"Cleared today's approved jobs");
+  await maybeClawbackToday();
+  renderTasks();renderChores();renderTodaysActivity();
+  showToast("↩️ Today cleared.");
+}
+document.getElementById("clearTodayBtn").addEventListener("click",clearEverythingToday);
 
-  if(pending.length === 0){
-    container.innerHTML = '<div class="activity-empty">Nothing waiting on you right now.</div>';
-    return;
-  }
-  pending.forEach(({chore, entry})=>{
-    const card = document.createElement("div");
-    card.className = "approval-card";
-    card.innerHTML =
-      '<img class="approval-thumb" src="' + entry.photo + '" alt="chore photo">' +
-      '<div class="approval-info">' +
-        '<div class="name">' + chore.emoji + ' ' + chore.label + '</div>' +
-        '<div class="amt">' + formatMoney(entry.amount) + '</div>' +
-      '</div>' +
-      '<div class="approval-btns">' +
-        '<button class="approve-btn">✅ Approve</button>' +
-        '<button class="reject-btn">❌ Reject</button>' +
-      '</div>';
-    card.querySelector(".approve-btn").addEventListener("click", ()=> approveChore(chore.id));
-    card.querySelector(".reject-btn").addEventListener("click", ()=> rejectChore(chore.id));
-    container.appendChild(card);
-  });
+/* ---------- Recent transaction ledger ---------- */
+function renderTransactions(){
+  const c=document.getElementById("transactionList");if(!c)return;c.innerHTML="";
+  const items=Object.entries(transactions).map(([id,v])=>({id,...v})).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,15);
+  if(!items.length){c.innerHTML='<div class="activity-empty">No money activity yet.</div>';return;}
+  items.forEach(t=>{let icon="💰";if(t.type==="job")icon="💼";if(t.type==="allowance")icon="💵";if(t.type==="purchase")icon="🛍️";if(t.type==="savingsMatch")icon="🏦";if(t.type==="allocation")icon="📬";if(t.type==="correction")icon="↩️";const row=document.createElement("div");row.className="activity-row";let detail="";if(t.type==="allocation"&&t.meta)detail="Spend "+formatMoney(t.meta.spend)+" · Save "+formatMoney(t.meta.save)+" · Give "+formatMoney(t.meta.give);else if(t.type==="purchase"&&t.meta)detail="Price "+formatMoney(t.meta.price)+" · Dad Match "+formatMoney(t.meta.dadMatched||0);else detail=nowLabel(t.ts);row.innerHTML='<div class="activity-emoji">'+icon+'</div><div class="activity-label">'+escapeHtml(t.description||t.type)+'<small>'+escapeHtml(detail)+'</small></div><div class="activity-tag">'+(t.amount>0?"+":"")+(t.amount?formatMoney(t.amount):"")+'</div>';c.appendChild(row);});
 }
 
-function approveChore(choreId){
-  const entry = dayLog.paidChores && dayLog.paidChores[choreId];
-  if(!entry || entry.status !== "pending") return;
-  const amount = entry.amount || 0;
-  runTransaction(moneyRef, (current)=>{
-    let m = current || { balance:0 };
-    m.balance = (m.balance || 0) + amount;
-    return m;
-  }).then(()=>{
-    update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), {
-      [choreId]: { status:"approved", amount:amount, ts:Date.now() }
-    }).then(()=>{
-      showToast("✅ Approved! +" + formatMoney(amount));
-    });
-  });
+/* ---------- 7-day history ---------- */
+function renderHistory(){
+  const list=document.getElementById("historyList");list.innerHTML="";const promises=[];
+  for(let i=6;i>=0;i--){const dstr=dateStrOffset(-i);promises.push(get(ref(db,ROOT+"/days/"+dstr)).then(s=>{const v=s.val()||{};return{dstr,morningDone:periodComplete("morning",v),eveningDone:periodComplete("evening",v)};}));}
+  Promise.all(promises).then(results=>results.forEach(r=>{const row=document.createElement("div");row.className="history-row";const label=parseLocalDate(r.dstr).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});row.innerHTML='<span>'+label+'</span><span class="dots"><span class="history-dot'+(r.morningDone?' on':'')+'" title="Morning"></span><span class="history-dot'+(r.eveningDone?' on':'')+'" title="Evening"></span></span>';list.appendChild(row);}));
 }
 
-function rejectChore(choreId){
-  update(ref(db, "routineTracker/days/" + todayStr() + "/paidChores"), { [choreId]: null }).then(()=>{
-    showToast("↩️ Sent back — he can try again");
-  });
-}
+/* ---------- Parent dashboard ---------- */
+const gearBtn=document.getElementById("gearBtn"),pinOverlay=document.getElementById("pinOverlay"),parentOverlay=document.getElementById("parentOverlay"),pinInput=document.getElementById("pinInput"),pinError=document.getElementById("pinError");
+gearBtn.addEventListener("click",()=>{pinInput.value="";pinError.style.display="none";pinOverlay.classList.add("show");setTimeout(()=>pinInput.focus(),50);});
+document.getElementById("pinCancel").addEventListener("click",()=>pinOverlay.classList.remove("show"));
+document.getElementById("pinSubmit").addEventListener("click",submitPin);pinInput.addEventListener("keydown",e=>{if(e.key==="Enter")submitPin();});
+function submitPin(){if(pinInput.value===PARENT_PIN){pinOverlay.classList.remove("show");openParentPanel();}else pinError.style.display="block";}
+function openParentPanel(){renderHistory();renderTodaysActivity();renderPendingApprovals();renderXpQuickButtons();renderXpRecent();renderTransactions();renderParentStats();renderEditLists();renderEditChores();renderEditXpReasons();renderMatchSettings();renderEditWishlist();renderAllowanceSettings();renderSavingsSettings();renderAllowanceStatus();renderSavingsStatus();renderPurchaseWishlistOptions();renderPurchasePreview();parentOverlay.classList.add("show");}
+document.getElementById("parentClose").addEventListener("click",()=>parentOverlay.classList.remove("show"));
+function renderParentStats(){document.getElementById("statCurrent").textContent=streak.current||0;document.getElementById("statXp").textContent=xp.available||0;document.getElementById("statLifetimeXp").textContent=xp.lifetime||0;document.getElementById("statWallet").textContent=formatMoney(walletTotal());}
 
-function checkCelebration(){
-  const wrap = document.getElementById("celebrateWrap");
-  const complete = periodComplete(currentPeriod);
-  wrap.style.display = complete ? "block" : "none";
-  document.getElementById("celebrateText").textContent =
-    currentPeriod === "morning" ? "Morning routine complete! Great start!" : "Evening routine complete! Sweet dreams!";
-  if(complete && !wrap.dataset.celebrated){
-    wrap.dataset.celebrated = "1";
-    burstConfetti();
-  }
-  if(!complete){
-    wrap.dataset.celebrated = "";
-  }
-}
+/* ---------- Parent message ---------- */
+document.getElementById("msgClose").addEventListener("click",()=>update(msgRef,{dismissed:true}));
+document.getElementById("sendMsgBtn").addEventListener("click",()=>{const text=document.getElementById("msgInput").value.trim();if(!text)return;set(msgRef,{text,dismissed:false,ts:Date.now()});document.getElementById("msgInput").value="";showToast("💬 Message sent.");});
 
 /* ---------- Tabs ---------- */
-document.getElementById("tabMorning").addEventListener("click", ()=> switchPeriod("morning"));
-document.getElementById("tabEvening").addEventListener("click", ()=> switchPeriod("evening"));
-function switchPeriod(period){
-  currentPeriod = period;
-  document.getElementById("tabMorning").classList.toggle("active", period === "morning");
-  document.getElementById("tabEvening").classList.toggle("active", period === "evening");
-  document.body.classList.toggle("evening", period === "evening");
-  renderTasks();
-}
+document.getElementById("tabMorning").addEventListener("click",()=>switchPeriod("morning"));document.getElementById("tabEvening").addEventListener("click",()=>switchPeriod("evening"));
+function switchPeriod(period){currentPeriod=period;document.getElementById("tabMorning").classList.toggle("active",period==="morning");document.getElementById("tabEvening").classList.toggle("active",period==="evening");document.body.classList.toggle("evening",period==="evening");renderTasks();}
 
-/* ---------- Toast ---------- */
-let toastTimer = null;
-function showToast(text){
-  const el = document.getElementById("toast");
-  el.textContent = text;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=> el.classList.remove("show"), 2600);
-}
+/* ---------- Config editors: common emoji ---------- */
+function setupEmojiPicker(selectId,customId){const selectEl=document.getElementById(selectId),customEl=document.getElementById(customId);populateEmojiSelect(selectEl,null);selectEl.addEventListener("change",()=>{const custom=selectEl.value==="__custom__";customEl.style.display=custom?"inline-block":"none";if(custom)customEl.focus();});}
+function readEmojiPicker(selectId,customId){const s=document.getElementById(selectId),c=document.getElementById(customId);return s.value==="__custom__"?(c.value.trim()||"⭐"):(s.value||"⭐");}
+function resetEmojiPicker(selectId,customId){const s=document.getElementById(selectId),c=document.getElementById(customId);s.value=EMOJI_CHOICES[0][0];c.value="";c.style.display="none";}
+setupEmojiPicker("addMorningEmoji","addMorningEmojiCustom");setupEmojiPicker("addEveningEmoji","addEveningEmojiCustom");setupEmojiPicker("addChoreEmoji","addChoreEmojiCustom");
 
-/* ---------- Parent message banner ---------- */
-const msgRef = ref(db, "routineTracker/parentMessage");
-onValue(msgRef, (snap)=>{
-  const val = snap.val();
-  const banner = document.getElementById("msgBanner");
-  if(val && val.text && !val.dismissed){
-    document.getElementById("msgText").textContent = val.text;
-    banner.style.display = "flex";
-  } else {
-    banner.style.display = "none";
-  }
-});
-document.getElementById("msgClose").addEventListener("click", ()=>{
-  update(msgRef, { dismissed:true });
-});
-document.getElementById("sendMsgBtn").addEventListener("click", ()=>{
-  const text = document.getElementById("msgInput").value.trim();
-  if(!text) return;
-  set(msgRef, { text, dismissed:false, ts:Date.now() });
-  document.getElementById("msgInput").value = "";
-});
+/* tasks */
+function renderEditLists(){renderEditList("morning","editMorning");renderEditList("evening","editEvening");}
+function renderEditList(period,containerId){const c=document.getElementById(containerId);c.innerHTML="";(tasks[period]||[]).forEach(t=>{const row=document.createElement("div");row.className="edit-row";const sid="sel_"+period+"_"+t.id,cid="cus_"+period+"_"+t.id;row.innerHTML='<select class="emoji-in emoji-select" id="'+sid+'"></select><input type="text" class="emoji-in emoji-custom" id="'+cid+'" placeholder="🪄" style="display:none;"><input type="text" value="'+escapeAttr(t.label)+'" data-field="label"><button class="del">✕</button>';const s=row.querySelector("#"+sid),custom=row.querySelector("#"+cid);populateEmojiSelect(s,t.emoji);if(s.value==="__custom__"){custom.style.display="inline-block";custom.value=t.emoji;}s.addEventListener("change",()=>{if(s.value==="__custom__"){custom.style.display="inline-block";custom.focus();}else{custom.style.display="none";updateTaskField(period,t.id,"emoji",s.value);}});custom.addEventListener("change",()=>{if(custom.value.trim())updateTaskField(period,t.id,"emoji",custom.value.trim());});const label=row.querySelector('[data-field="label"]');label.addEventListener("change",()=>updateTaskField(period,t.id,"label",label.value));row.querySelector(".del").addEventListener("click",()=>{if(window.confirm('Remove "'+t.label+'"?'))set(ref(db,ROOT+"/config/tasks/"+period),(tasks[period]||[]).filter(x=>x.id!==t.id));});c.appendChild(row);});}
+function updateTaskField(period,id,field,value){set(ref(db,ROOT+"/config/tasks/"+period),(tasks[period]||[]).map(t=>t.id===id?{...t,[field]:value}:t));}
+function addTask(period,selectId,labelId,customId){const labelEl=document.getElementById(labelId),label=labelEl.value.trim();if(!label)return;const emoji=readEmojiPicker(selectId,customId),id=period[0]+Date.now();set(ref(db,ROOT+"/config/tasks/"+period),(tasks[period]||[]).concat([{id,emoji,label}])).then(()=>{labelEl.value="";resetEmojiPicker(selectId,customId);});}
+document.getElementById("addMorningBtn").addEventListener("click",()=>addTask("morning","addMorningEmoji","addMorningLabel","addMorningEmojiCustom"));document.getElementById("addEveningBtn").addEventListener("click",()=>addTask("evening","addEveningEmoji","addEveningLabel","addEveningEmojiCustom"));
 
-/* ---------- Parent PIN gate ---------- */
-const gearBtn = document.getElementById("gearBtn");
-const pinOverlay = document.getElementById("pinOverlay");
-const parentOverlay = document.getElementById("parentOverlay");
-const pinInput = document.getElementById("pinInput");
-const pinError = document.getElementById("pinError");
+/* jobs */
+function renderEditChores(){const c=document.getElementById("editChores");c.innerHTML="";chores.forEach(job=>{const row=document.createElement("div");row.className="edit-row";const sid="sel_job_"+job.id,cid="cus_job_"+job.id;row.innerHTML='<select class="emoji-in emoji-select" id="'+sid+'"></select><input type="text" class="emoji-in emoji-custom" id="'+cid+'" style="display:none;"><input type="text" value="'+escapeAttr(job.label)+'" data-field="label"><input type="number" class="amount-in" value="'+Number(job.amount||0)+'" min="0" step="0.5" data-field="amount"><button class="del">✕</button>';const s=row.querySelector("#"+sid),custom=row.querySelector("#"+cid);populateEmojiSelect(s,job.emoji);if(s.value==="__custom__"){custom.style.display="inline-block";custom.value=job.emoji;}s.addEventListener("change",()=>{if(s.value==="__custom__"){custom.style.display="inline-block";custom.focus();}else{custom.style.display="none";updateJob(job.id,"emoji",s.value);}});custom.addEventListener("change",()=>{if(custom.value.trim())updateJob(job.id,"emoji",custom.value.trim());});row.querySelector('[data-field="label"]').addEventListener("change",e=>updateJob(job.id,"label",e.target.value));row.querySelector('[data-field="amount"]').addEventListener("change",e=>updateJob(job.id,"amount",Number(e.target.value)||0));row.querySelector(".del").addEventListener("click",()=>{if(window.confirm('Remove "'+job.label+'"?'))set(choresRef,chores.filter(x=>x.id!==job.id));});c.appendChild(row);});}
+function updateJob(id,field,value){set(choresRef,chores.map(c=>c.id===id?{...c,[field]:value}:c));}
+document.getElementById("addChoreBtn").addEventListener("click",()=>{const labelEl=document.getElementById("addChoreLabel"),amountEl=document.getElementById("addChoreAmount"),label=labelEl.value.trim(),amount=Number(amountEl.value)||0;if(!label)return;const emoji=readEmojiPicker("addChoreEmoji","addChoreEmojiCustom");set(choresRef,chores.concat([{id:"c"+Date.now(),emoji,label,amount}])).then(()=>{labelEl.value="";amountEl.value="";resetEmojiPicker("addChoreEmoji","addChoreEmojiCustom");});});
 
-gearBtn.addEventListener("click", ()=>{
-  pinInput.value = "";
-  pinError.style.display = "none";
-  pinOverlay.classList.add("show");
-  setTimeout(()=> pinInput.focus(), 50);
-});
-document.getElementById("pinCancel").addEventListener("click", ()=> pinOverlay.classList.remove("show"));
-document.getElementById("pinSubmit").addEventListener("click", submitPin);
-pinInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter") submitPin(); });
+/* XP reasons */
+function renderEditXpReasons(){const c=document.getElementById("editXpReasons");c.innerHTML="";xpReasons.forEach(r=>{const row=document.createElement("div");row.className="edit-row";row.innerHTML='<input type="text" class="emoji-in" value="'+escapeAttr(r.emoji||"⭐")+'" data-field="emoji"><input type="text" value="'+escapeAttr(r.label)+'" data-field="label"><input type="number" class="amount-in" value="'+Number(r.amount||0)+'" min="1" step="1" data-field="amount"><button class="del">✕</button>';row.querySelector('[data-field="emoji"]').addEventListener("change",e=>updateXpReason(r.id,"emoji",e.target.value.trim()||"⭐"));row.querySelector('[data-field="label"]').addEventListener("change",e=>updateXpReason(r.id,"label",e.target.value));row.querySelector('[data-field="amount"]').addEventListener("change",e=>updateXpReason(r.id,"amount",Math.max(1,Math.round(Number(e.target.value)||1))));row.querySelector(".del").addEventListener("click",()=>set(xpReasonsRef,xpReasons.filter(x=>x.id!==r.id)));c.appendChild(row);});}
+function updateXpReason(id,field,value){set(xpReasonsRef,xpReasons.map(r=>r.id===id?{...r,[field]:value}:r));}
+document.getElementById("addXpBtn").addEventListener("click",()=>{const emoji=document.getElementById("addXpEmoji").value.trim()||"⭐",label=document.getElementById("addXpLabel").value.trim(),amount=Math.max(1,Math.round(Number(document.getElementById("addXpAmount").value)||0));if(!label||!amount)return;set(xpReasonsRef,xpReasons.concat([{id:"x"+Date.now(),emoji,label,amount}])).then(()=>{document.getElementById("addXpEmoji").value="";document.getElementById("addXpLabel").value="";document.getElementById("addXpAmount").value="";});});
 
-function submitPin(){
-  if(pinInput.value === PARENT_PIN){
-    pinOverlay.classList.remove("show");
-    openParentPanel();
-  } else {
-    pinError.style.display = "block";
-  }
-}
+/* match tiers */
+function renderMatchSettings(){const c=document.getElementById("editMatchTiers");c.innerHTML="";sortedMatchTiers().forEach(t=>{const row=document.createElement("div");row.className="edit-row";row.innerHTML='<input type="number" class="amount-in" value="'+t.maxMatch+'" min="1" step="1" data-field="match"><span style="font-weight:900;color:var(--muted);">match for</span><input type="number" class="amount-in" value="'+t.xpCost+'" min="1" step="1" data-field="xp"><span style="font-weight:900;color:var(--muted);">XP</span><button class="del">✕</button>';row.querySelector('[data-field="match"]').addEventListener("change",e=>updateMatchTier(t.id,"maxMatch",Number(e.target.value)||1));row.querySelector('[data-field="xp"]').addEventListener("change",e=>updateMatchTier(t.id,"xpCost",Math.max(1,Math.round(Number(e.target.value)||1))));row.querySelector(".del").addEventListener("click",()=>saveDadMatch({...dadMatch,tiers:(dadMatch.tiers||[]).filter(x=>x.id!==t.id)}));c.appendChild(row);});document.getElementById("aboveTierRate").value=Number(dadMatch.xpPerDollarAboveHighest||10);document.getElementById("consumeXpOnMatch").checked=dadMatch.consumeXp!==false;}
+function saveDadMatch(obj){return set(dadMatchRef,obj);}
+function updateMatchTier(id,field,value){saveDadMatch({...dadMatch,tiers:(dadMatch.tiers||[]).map(t=>t.id===id?{...t,[field]:value}:t)});}
+document.getElementById("addMatchTierBtn").addEventListener("click",()=>{const maxMatch=Number(document.getElementById("addMatchDollars").value)||0,xpCost=Math.round(Number(document.getElementById("addMatchXp").value)||0);if(maxMatch<=0||xpCost<=0)return;saveDadMatch({...dadMatch,tiers:(dadMatch.tiers||[]).concat([{id:"dm"+Date.now(),maxMatch,xpCost}])}).then(()=>{document.getElementById("addMatchDollars").value="";document.getElementById("addMatchXp").value="";});});
+document.getElementById("saveMatchConfigBtn").addEventListener("click",()=>saveDadMatch({...dadMatch,xpPerDollarAboveHighest:Math.max(1,Math.round(Number(document.getElementById("aboveTierRate").value)||10)),consumeXp:document.getElementById("consumeXpOnMatch").checked}).then(()=>showToast("🤝 Dad Match settings saved.")));
 
-function openParentPanel(){
-  renderHistory();
-  renderTodaysActivity();
-  renderPendingApprovals();
-  parentOverlay.classList.add("show");
-}
-document.getElementById("parentClose").addEventListener("click", ()=> parentOverlay.classList.remove("show"));
+/* wishlist editor */
+function renderEditWishlist(){const c=document.getElementById("editWishlist");c.innerHTML="";wishlist.forEach(w=>{const row=document.createElement("div");row.className="edit-row";row.innerHTML='<input type="text" class="emoji-in" value="'+escapeAttr(w.emoji||"🎁")+'" data-field="emoji"><input type="text" value="'+escapeAttr(w.label)+'" data-field="label"><input type="number" class="amount-in" value="'+Number(w.price||0)+'" min="0" step="0.01" data-field="price"><button class="del">✕</button>';row.querySelector('[data-field="emoji"]').addEventListener("change",e=>updateWish(w.id,"emoji",e.target.value.trim()||"🎁"));row.querySelector('[data-field="label"]').addEventListener("change",e=>updateWish(w.id,"label",e.target.value));row.querySelector('[data-field="price"]').addEventListener("change",e=>updateWish(w.id,"price",moneyRound(Number(e.target.value)||0)));row.querySelector(".del").addEventListener("click",()=>set(wishlistRef,wishlist.filter(x=>x.id!==w.id)));c.appendChild(row);});if(!wishlist.length)c.innerHTML='<div class="activity-empty">No wish-list items yet.</div>';}
+function updateWish(id,field,value){set(wishlistRef,wishlist.map(w=>w.id===id?{...w,[field]:value}:w));}
+document.getElementById("addWishBtn").addEventListener("click",()=>{const emoji=document.getElementById("addWishEmoji").value.trim()||"🎁",label=document.getElementById("addWishLabel").value.trim(),price=moneyRound(Number(document.getElementById("addWishPrice").value)||0);if(!label||price<=0)return;set(wishlistRef,wishlist.concat([{id:"w"+Date.now(),emoji,label,price}])).then(()=>{document.getElementById("addWishEmoji").value="";document.getElementById("addWishLabel").value="";document.getElementById("addWishPrice").value="";});});
 
-document.getElementById("resetMoneyBtn").addEventListener("click", ()=>{
-  const ok = window.confirm("Reset his balance to $0? Only do this after you've actually paid him.");
-  if(ok){
-    set(moneyRef, { balance:0 });
-  }
-});
+/* allowance/savings settings */
+function renderAllowanceSettings(){document.getElementById("allowanceAmount").value=Number(allowanceConfig.weeklyAmount||0);document.getElementById("allowanceDays").value=Number(allowanceConfig.requiredDays||5);}
+document.getElementById("saveAllowanceConfigBtn").addEventListener("click",()=>set(allowanceConfigRef,{weeklyAmount:moneyRound(Number(document.getElementById("allowanceAmount").value)||0),requiredDays:clamp(Math.round(Number(document.getElementById("allowanceDays").value)||5),1,7)}).then(()=>showToast("💵 Allowance settings saved.")));
+function renderSavingsSettings(){document.getElementById("savingsContribution").value=Number(savingsConfig.monthlyContribution||0);}
+document.getElementById("saveSavingsConfigBtn").addEventListener("click",()=>set(savingsConfigRef,{monthlyContribution:moneyRound(Number(document.getElementById("savingsContribution").value)||0)}).then(()=>showToast("🏦 Savings settings saved.")));
 
-/* ---------- History (last 7 days) ---------- */
-function renderHistory(){
-  const list = document.getElementById("historyList");
-  list.innerHTML = "";
-  const promises = [];
-  for(let i=6; i>=0; i--){
-    const dstr = dateStrOffset(-i);
-    promises.push(
-      get(ref(db, "routineTracker/days/" + dstr)).then(snap=>{
-        const val = snap.val() || {};
-        const morningDone = (tasks.morning||[]).length > 0 && (tasks.morning||[]).every(t => val.morning && val.morning[t.id]);
-        const eveningDone = (tasks.evening||[]).length > 0 && (tasks.evening||[]).every(t => val.evening && val.evening[t.id]);
-        return { dstr, morningDone, eveningDone };
-      })
-    );
-  }
-  Promise.all(promises).then(results=>{
-    results.forEach(r=>{
-      const row = document.createElement("div");
-      row.className = "history-row";
-      const label = new Date(r.dstr + "T00:00:00").toLocaleDateString(undefined, { weekday:"short", month:"short", day:"numeric" });
-      row.innerHTML =
-        '<span>' + label + '</span>' +
-        '<span class="dots">' +
-          '<span class="history-dot' + (r.morningDone ? ' on' : '') + '" title="Morning"></span>' +
-          '<span class="history-dot' + (r.eveningDone ? ' on' : '') + '" title="Evening"></span>' +
-        '</span>';
-      list.appendChild(row);
-    });
-  });
-}
+/* ---------- Toast + confetti ---------- */
+let toastTimer=null;function showToast(text){const el=document.getElementById("toast");el.textContent=text;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2800);}
+const canvas=document.getElementById("confettiCanvas"),ctx=canvas.getContext("2d");function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}resizeCanvas();window.addEventListener("resize",resizeCanvas);
+function burstConfetti(){const colors=["#F2994A","#F2545B","#4CAF6D","#3E7CB1","#FFD166"],pieces=[];for(let i=0;i<120;i++)pieces.push({x:canvas.width/2,y:canvas.height*.3,vx:(Math.random()-.5)*14,vy:(Math.random()-1.2)*14,size:5+Math.random()*6,color:colors[Math.floor(Math.random()*colors.length)],rot:Math.random()*360,vrot:(Math.random()-.5)*20});let frame=0;function tick(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6);ctx.restore();});frame++;if(frame<90)requestAnimationFrame(tick);else ctx.clearRect(0,0,canvas.width,canvas.height);}tick();}
 
-/* ---------- Edit routine tasks ---------- */
-function renderEditLists(){
-  renderEditList("morning", "editMorning");
-  renderEditList("evening", "editEvening");
-}
-function renderEditList(period, containerId){
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-  (tasks[period] || []).forEach(t=>{
-    const row = document.createElement("div");
-    row.className = "edit-row";
-    const selId = "sel_" + period + "_" + t.id;
-    const cusId = "cus_" + period + "_" + t.id;
-    row.innerHTML =
-      '<select class="emoji-in emoji-select" id="' + selId + '"></select>' +
-      '<input type="text" class="emoji-in emoji-custom" id="' + cusId + '" placeholder="🪄" style="display:none;">' +
-      '<input type="text" value="' + escapeAttr(t.label) + '" data-field="label">' +
-      '<button class="del">✕</button>';
-    const selectEl = row.querySelector("#" + selId);
-    const customEl = row.querySelector("#" + cusId);
-    populateEmojiSelect(selectEl, t.emoji);
-    if(selectEl.value === "__custom__"){
-      customEl.style.display = "inline-block";
-      customEl.value = t.emoji;
-    }
-    selectEl.addEventListener("change", ()=>{
-      if(selectEl.value === "__custom__"){
-        customEl.style.display = "inline-block";
-        customEl.focus();
-      } else {
-        customEl.style.display = "none";
-        updateTaskField(period, t.id, "emoji", selectEl.value);
-      }
-    });
-    customEl.addEventListener("change", ()=>{
-      const val = customEl.value.trim();
-      if(val) updateTaskField(period, t.id, "emoji", val);
-    });
-    const labelInput = row.querySelector('[data-field="label"]');
-    labelInput.addEventListener("change", ()=> updateTaskField(period, t.id, "label", labelInput.value));
-    row.querySelector(".del").addEventListener("click", ()=>{
-      if(window.confirm('Remove "' + t.label + '"?')) deleteTask(period, t.id);
-    });
-    container.appendChild(row);
-  });
-}
-function escapeAttr(str){
-  return String(str || "").replace(/&/g,"&amp;").replace(/"/g,"&quot;");
-}
-function updateTaskField(period, taskId, field, value){
-  const list = (tasks[period] || []).map(t => t.id === taskId ? { ...t, [field]: value } : t);
-  set(ref(db, "routineTracker/config/tasks/" + period), list);
-}
-function deleteTask(period, taskId){
-  const list = (tasks[period] || []).filter(t => t.id !== taskId);
-  set(ref(db, "routineTracker/config/tasks/" + period), list);
-}
-function setupEmojiPicker(selectId, customId){
-  const selectEl = document.getElementById(selectId);
-  const customEl = document.getElementById(customId);
-  populateEmojiSelect(selectEl, null);
-  selectEl.addEventListener("change", ()=>{
-    const isCustom = selectEl.value === "__custom__";
-    customEl.style.display = isCustom ? "inline-block" : "none";
-    if(isCustom) customEl.focus();
-  });
-}
-function readEmojiPicker(selectId, customId){
-  const selectEl = document.getElementById(selectId);
-  const customEl = document.getElementById(customId);
-  if(selectEl.value === "__custom__"){
-    return customEl.value.trim() || "⭐";
-  }
-  return selectEl.value || "⭐";
-}
-function resetEmojiPicker(selectId, customId){
-  const selectEl = document.getElementById(selectId);
-  const customEl = document.getElementById(customId);
-  selectEl.value = EMOJI_CHOICES[0][0];
-  customEl.value = "";
-  customEl.style.display = "none";
-}
-setupEmojiPicker("addMorningEmoji", "addMorningEmojiCustom");
-setupEmojiPicker("addEveningEmoji", "addEveningEmojiCustom");
-setupEmojiPicker("addChoreEmoji", "addChoreEmojiCustom");
-
-function addTask(period, emojiSelectId, labelInputId, emojiCustomId){
-  const labelEl = document.getElementById(labelInputId);
-  const emoji = readEmojiPicker(emojiSelectId, emojiCustomId);
-  const label = labelEl.value.trim();
-  if(!label) return;
-  const newId = period[0] + Date.now();
-  const list = (tasks[period] || []).concat([{ id:newId, emoji, label }]);
-  set(ref(db, "routineTracker/config/tasks/" + period), list).then(()=>{
-    labelEl.value = "";
-    resetEmojiPicker(emojiSelectId, emojiCustomId);
-  });
-}
-document.getElementById("addMorningBtn").addEventListener("click", ()=> addTask("morning","addMorningEmoji","addMorningLabel","addMorningEmojiCustom"));
-document.getElementById("addEveningBtn").addEventListener("click", ()=> addTask("evening","addEveningEmoji","addEveningLabel","addEveningEmojiCustom"));
-
-/* ---------- Edit paid chores ---------- */
-function renderEditChores(){
-  const container = document.getElementById("editChores");
-  container.innerHTML = "";
-  chores.forEach(c=>{
-    const row = document.createElement("div");
-    row.className = "edit-row";
-    const selId = "sel_chore_" + c.id;
-    const cusId = "cus_chore_" + c.id;
-    row.innerHTML =
-      '<select class="emoji-in emoji-select" id="' + selId + '"></select>' +
-      '<input type="text" class="emoji-in emoji-custom" id="' + cusId + '" placeholder="🪄" style="display:none;">' +
-      '<input type="text" value="' + escapeAttr(c.label) + '" data-field="label">' +
-      '<input type="number" class="amount-in" value="' + Number(c.amount || 0) + '" min="0" step="0.5" data-field="amount">' +
-      '<button class="del">✕</button>';
-    const selectEl = row.querySelector("#" + selId);
-    const customEl = row.querySelector("#" + cusId);
-    populateEmojiSelect(selectEl, c.emoji);
-    if(selectEl.value === "__custom__"){
-      customEl.style.display = "inline-block";
-      customEl.value = c.emoji;
-    }
-    selectEl.addEventListener("change", ()=>{
-      if(selectEl.value === "__custom__"){
-        customEl.style.display = "inline-block";
-        customEl.focus();
-      } else {
-        customEl.style.display = "none";
-        updateChoreField(c.id, "emoji", selectEl.value);
-      }
-    });
-    customEl.addEventListener("change", ()=>{
-      const val = customEl.value.trim();
-      if(val) updateChoreField(c.id, "emoji", val);
-    });
-    const labelInput = row.querySelector('[data-field="label"]');
-    const amountInput = row.querySelector('[data-field="amount"]');
-    labelInput.addEventListener("change", ()=> updateChoreField(c.id, "label", labelInput.value));
-    amountInput.addEventListener("change", ()=> updateChoreField(c.id, "amount", parseFloat(amountInput.value) || 0));
-    row.querySelector(".del").addEventListener("click", ()=>{
-      if(window.confirm('Remove "' + c.label + '"?')) deleteChore(c.id);
-    });
-    container.appendChild(row);
-  });
-}
-function updateChoreField(choreId, field, value){
-  const list = chores.map(c => c.id === choreId ? { ...c, [field]: value } : c);
-  set(choresRef, list);
-}
-function deleteChore(choreId){
-  const list = chores.filter(c => c.id !== choreId);
-  set(choresRef, list);
-}
-document.getElementById("addChoreBtn").addEventListener("click", ()=>{
-  const labelEl = document.getElementById("addChoreLabel");
-  const amountEl = document.getElementById("addChoreAmount");
-  const emoji = readEmojiPicker("addChoreEmoji", "addChoreEmojiCustom");
-  const label = labelEl.value.trim();
-  const amount = parseFloat(amountEl.value) || 0;
-  if(!label) return;
-  const newId = "c" + Date.now();
-  const list = chores.concat([{ id:newId, emoji, label, amount }]);
-  set(choresRef, list).then(()=>{
-    labelEl.value = "";
-    amountEl.value = "";
-    resetEmojiPicker("addChoreEmoji", "addChoreEmojiCustom");
-  });
-});
-
-/* ---------- Confetti ---------- */
-const canvas = document.getElementById("confettiCanvas");
-const ctx = canvas.getContext("2d");
-function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
-function burstConfetti(){
-  const colors = ["#F2994A","#F2545B","#4CAF6D","#3E7CB1","#FFD166"];
-  const pieces = [];
-  for(let i=0;i<120;i++){
-    pieces.push({
-      x: canvas.width/2,
-      y: canvas.height*0.3,
-      vx: (Math.random()-0.5) * 14,
-      vy: (Math.random()-1.2) * 14,
-      size: 5 + Math.random()*6,
-      color: colors[Math.floor(Math.random()*colors.length)],
-      rot: Math.random()*360,
-      vrot: (Math.random()-0.5)*20
-    });
-  }
-  let frame = 0;
-  const maxFrames = 90;
-  function tick(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
-      p.vy += 0.35;
-      p.x += p.vx;
-      p.y += p.vy;
-      p.rot += p.vrot;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot * Math.PI/180);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
-      ctx.restore();
-    });
-    frame++;
-    if(frame < maxFrames){
-      requestAnimationFrame(tick);
-    } else {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-    }
-  }
-  tick();
-}
-
-/* ---------- Init ---------- */
-renderTasks();
-renderChores();
-renderStreak();
-renderMoney();
+/* ---------- Initial render ---------- */
+renderTasks();renderChores();renderStreak();renderWallet();renderXp();renderWishlist();renderParentStats();
 </script>
 </body>
 </html>
